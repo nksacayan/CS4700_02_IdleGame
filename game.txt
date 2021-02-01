@@ -1,0 +1,23 @@
+Let's make a game!
+	name:Bunny Clicker
+	by:Nicholas Sacayan
+	desc:An idle game for Professor Summerville's CS 4700.02
+	created:2/1/2021
+	updated:2/1/2021
+	version:1
+
+Settings
+
+Layout
+	use default
+
+Buttons
+
+Resources
+
+Shinies
+
+Buildings
+
+Achievements
+	
