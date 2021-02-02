@@ -14,7 +14,7 @@ Buttons
 
   *cowButton
     name:Cow Button
-    on click: yield 1 cow
+    on click:yield 1 cow
 
 Resources
   *gold
