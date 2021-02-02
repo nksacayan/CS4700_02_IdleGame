@@ -16,3 +16,7 @@ Resources
   *gold
     name:Gold
     desc:This is gold
+
+  *cows
+    name:Cows
+    desc:They go moo
