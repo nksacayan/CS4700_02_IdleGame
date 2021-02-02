@@ -12,6 +12,10 @@ Buttons
     desc:This button makes gold
     on click:yield 1 gold
 
+  *cowButton
+    name:Cow Button
+    on click: yield 1 cow
+
 Resources
   *gold
     name:Gold
