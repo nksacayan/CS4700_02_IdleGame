@@ -7,13 +7,30 @@ Settings
 	stylesheet:stuff/bigBlue.css
 
 CSS
+	.box
+	{
+		border-style: solid;
+		border-width: medium;
+	}
+
+	#box-main
+	{
+	}
+
+	#box-enemies
+	{
+		left:0px;
+		top:50%;
+		bottom:0px;
+		right:40%;
+		position:absolute;
+	}
 
 Layout
 	use default
 
-	//*enemies
-		//header:Enemies
-		//footer:Footer
+	*enemies
+		header:Enemies
 
 
 Buttons
@@ -39,7 +56,10 @@ Buttons
 
 		*exploreForestButton
 			name:Explore Forest
+			icon:https://imgur.com/7U428yg.jpg
 			on click:spawn rabbit
+			on click:enemyHealth=100
+			on click:enemyAttack=100
 
 	// Combat
 
@@ -67,17 +87,33 @@ Resources
 	*xp
 		name:XP
 
-	*gold
-		name:Gold
+	*level
+		name:Level
 
-	*renown
-		name:Renown
+	// Hidden until obtained
+	*TEMPLATE
 		hidden when 0
 
+		*gold
+			name:Gold
+
+		*renown
+			name:Renown
+
 	// Delete before Friday
-	*fuel
-		name:Fuel
-		desc:Just for you Sean
+	*TEMPLATE
+
+		*fuel
+			name:Fuel
+			desc:Just for you Sean
+
+	// Enemy Combat Stats
+	*TEMPLATE
+		always hidden
+
+		*enemyHealth
+
+		*enemyAttack
 
 Buildings
 
@@ -96,5 +132,4 @@ Shinies
 		// Forest
 			*rabbit
 				name:Rabbit
-				desc:A cute rabbit
 				movement:anywhere
