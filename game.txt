@@ -7,16 +7,18 @@ Settings
 	stylesheet:https://pastebin.com/raw/JxMuvhXd
 
 CSS
-	.box
-	{
+	.box {
 		border: thin solid white;
 		overflow: hidden;
-		position:static;
+		position: static;
 	}
 
-	#box-LogBox
-	{
-		height:150px;
+	#box-LogBox {
+		max-height:150px;
+	}
+
+	#log {
+    height: 100px;
 	}
 
 Layout
@@ -54,7 +56,7 @@ Layout
 
 	*EnemyBox
 		header:Enemy Box
-		contains:tag:enemyTag
+		contains:tag:enemyTag, tag:enemyIcon
 
 	Buttons
 		// Training options
@@ -77,7 +79,6 @@ Layout
 
 			*exploreForestButton
 				name:Explore Forest
-				icon:https://imgur.com/7U428yg.jpg
 				on click:spawn rabbit
 				on click:enemyHealth=100
 				on click:enemyAttack=100
@@ -87,10 +88,20 @@ Layout
 			name:Attack
 			tag:combatTag
 
+		// Icons
+		*rabbitButton
+			tag:enemyIcon
+			icon:https://imgur.com/7U428yg.jpg
+
 		// Memes
 		*fuelButton
 			name:Get Fuel
 			on click:yield 1 fuel
+
+		// Other
+		*clearLogButton
+			name:Clear Log
+			on click:clear log
 
 	Resources
 		*TEMPLATE
@@ -155,11 +166,3 @@ Achievements
 Items
 
 Shinies
-	// Enemies
-		*TEMPLATE
-			duration:600
-
-			// Forest
-				*rabbit
-					name:Rabbit
-					movement:anywhere
