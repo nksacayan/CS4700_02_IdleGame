@@ -7,22 +7,26 @@ Layout
 	use default
 
 Buttons
-  *train
-    name:Train
-    on click:yield 1 gold
-		on click:yield 1 xp
+	*TEMPLATE
+	  *train
+	    name:Train
+	    on click:yield 1 attack
+			on click:yield 1 health
 
-	*study
-    name:Study
-    on click:yield 1 magic
-		on click:yield 1 xp
+		*study
+	    name:Study
+	    on click:yield 1 magic
+			on click:yield 1 mana
+	*TEMPLATE
 
 Resources
   *health
     name:Health
+		show max
 
 	*mana
 		name:Mana
+		show max
 
 	*attack
 		name:Attack
@@ -32,3 +36,10 @@ Resources
 
 	*xp
 		name:XP
+
+	*gold
+		name:Gold
+
+	*renown
+		name:Renown
+		hidden when 0
