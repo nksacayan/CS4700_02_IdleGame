@@ -3,6 +3,10 @@ Let's make a game!
 	by:Nicholas Sacayan
 	desc:An idle game for Professor Summerville's CS 4700.02
 
+Settings
+
+CSS
+
 Layout
 	use default
 
@@ -43,3 +47,13 @@ Resources
 	*renown
 		name:Renown
 		hidden when 0
+
+Buildings
+
+Upgrades
+
+Achievements
+
+Items
+
+Shinies
