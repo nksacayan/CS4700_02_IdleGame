@@ -1,5 +1,5 @@
 Let's make a game!
-	name:Bunny Clicker
+	name:Adventurer's Guild Clicker
 	by:Nicholas Sacayan
 	desc:An idle game for Professor Summerville's CS 4700.02
 
@@ -7,20 +7,28 @@ Layout
 	use default
 
 Buttons
-  *goldButton
-    name:Gold Button
-    desc:This button makes gold
+  *train
+    name:Train
     on click:yield 1 gold
+		on click:yield 1 xp
 
-  *cowButton
-    name:Cow Button
-    on click:yield 1 cow
+	*study
+    name:Study
+    on click:yield 1 magic
+		on click:yield 1 xp
 
 Resources
-  *gold
-    name:Gold
-    desc:This is gold
+  *health
+    name:Health
 
-  *cow
-    name:Cows
-    desc:They go moo
+	*mana
+		name:Mana
+
+	*attack
+		name:Attack
+
+	*magic
+		name:Magic
+
+	*xp
+		name:XP
