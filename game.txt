@@ -4,116 +4,147 @@ Let's make a game!
 	desc:An idle game for Professor Summerville's CS 4700.02
 
 Settings
-	stylesheet:stuff/bigBlue.css
+	stylesheet:https://pastebin.com/raw/JxMuvhXd
 
 CSS
 	.box
 	{
-		border-style: solid;
-		border-width: medium;
+		border: thin solid white;
+		overflow: hidden;
+		position:static;
 	}
 
-	#box-main
+	#box-LogBox
 	{
-	}
-
-	#box-enemies
-	{
-		left:0px;
-		top:50%;
-		bottom:0px;
-		right:40%;
-		position:absolute;
+		height:150px;
 	}
 
 Layout
-	use default
+	*ButtonBox
+		contains:Buttons
+		header:Buttons
 
-	*enemies
-		header:Enemies
+	*ResourceBox
+		contains:Resources
+		header:Resources
 
+	*BuildingBox
+		contains:Buildings
+		header:Buildings
 
-Buttons
+	*UpgradeBox
+		contains:Upgrades
+		header:Upgrades
 
-	// Training options
-	*TEMPLATE
-	on click:yield 1 xp
+	*ItemBox
+		contains:Items
+		header:Items
 
-	  *trainButton
-	    name:Train
-	    on click:yield 1 attack
-			on click:yield 1 health
+	*AchievementBox
+		contains:Achievements
+		header:Achievements
 
-		*studyButton
-	    name:Study
-	    on click:yield 1 magic
-			on click:yield 1 mana
+	*LogBox
+		contains:Log
+		header:Log
 
-	*TEMPLATE
+	*CombatBox
+		header:Combat Box
+		contains:tag:combatTag
 
-	// Exploring
-	*TEMPLATE
+	*EnemyBox
+		header:Enemy Box
+		contains:tag:enemyTag
 
-		*exploreForestButton
-			name:Explore Forest
-			icon:https://imgur.com/7U428yg.jpg
-			on click:spawn rabbit
-			on click:enemyHealth=100
-			on click:enemyAttack=100
+	Buttons
+		// Training options
+		*TEMPLATE
+		on click:yield 1 xp
 
-	// Combat
+		  *trainButton
+		    name:Train
+		    on click:yield 1 attack
+				on click:yield 1 health
+				on click:log I feel stronger!
 
-	// Memes
-	*fuelButton
-		name:Get Fuel
-		on click:yield 1 fuel
+			*studyButton
+		    name:Study
+		    on click:yield 1 magic
+				on click:yield 1 mana
 
-Resources
+		// Exploring
+		*TEMPLATE
 
-  *health
-    name:Health
-		show max
+			*exploreForestButton
+				name:Explore Forest
+				icon:https://imgur.com/7U428yg.jpg
+				on click:spawn rabbit
+				on click:enemyHealth=100
+				on click:enemyAttack=100
 
-	*mana
-		name:Mana
-		show max
+		// Combat
+		*attackButton
+			name:Attack
+			tag:combatTag
 
-	*attack
-		name:Attack
+		// Memes
+		*fuelButton
+			name:Get Fuel
+			on click:yield 1 fuel
 
-	*magic
-		name:Magic
+	Resources
+		*TEMPLATE
+			start with:100
 
-	*xp
-		name:XP
+		  *health
+		    name:Health
+				show max
 
-	*level
-		name:Level
+			*mana
+				name:Mana
+				show max
 
-	// Hidden until obtained
-	*TEMPLATE
-		hidden when 0
+		*TEMPLATE
+			start with:1
 
-		*gold
-			name:Gold
+			*attack
+				name:Attack
 
-		*renown
-			name:Renown
+			*magic
+				name:Magic
 
-	// Delete before Friday
-	*TEMPLATE
+			*level
+				name:Level
 
-		*fuel
-			name:Fuel
-			desc:Just for you Sean
+		*TEMPLATE
 
-	// Enemy Combat Stats
-	*TEMPLATE
-		always hidden
+			*xp
+				name:XP
 
-		*enemyHealth
+		// Hidden until obtained
+		*TEMPLATE
+			hidden when 0
 
-		*enemyAttack
+			*gold
+				name:Gold
+
+			*renown
+				name:Renown
+
+		// Delete before Friday
+		*TEMPLATE
+
+			*fuel
+				name:Fuel
+				desc:Just for you Sean
+
+		// Enemy Combat Stats
+		*TEMPLATE
+			tag:enemyTag
+
+			*enemyHealth
+
+			*enemyAttack
 
 Buildings
 
@@ -124,12 +155,11 @@ Achievements
 Items
 
 Shinies
+	// Enemies
+		*TEMPLATE
+			duration:600
 
-// Enemies
-	*TEMPLATE
-		duration:600
-
-		// Forest
-			*rabbit
-				name:Rabbit
-				movement:anywhere
+			// Forest
+				*rabbit
+					name:Rabbit
+					movement:anywhere
