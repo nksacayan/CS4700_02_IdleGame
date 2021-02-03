@@ -4,26 +4,52 @@ Let's make a game!
 	desc:An idle game for Professor Summerville's CS 4700.02
 
 Settings
+	stylesheet:stuff/bigBlue.css
 
 CSS
 
 Layout
 	use default
 
+	//*enemies
+		//header:Enemies
+		//footer:Footer
+
+
 Buttons
+
+	// Training options
 	*TEMPLATE
-	  *train
+	on click:yield 1 xp
+
+	  *trainButton
 	    name:Train
 	    on click:yield 1 attack
 			on click:yield 1 health
 
-		*study
+		*studyButton
 	    name:Study
 	    on click:yield 1 magic
 			on click:yield 1 mana
+
 	*TEMPLATE
 
+	// Exploring
+	*TEMPLATE
+
+		*exploreForestButton
+			name:Explore Forest
+			on click:spawn rabbit
+
+	// Combat
+
+	// Memes
+	*fuelButton
+		name:Get Fuel
+		on click:yield 1 fuel
+
 Resources
+
   *health
     name:Health
 		show max
@@ -48,6 +74,11 @@ Resources
 		name:Renown
 		hidden when 0
 
+	// Delete before Friday
+	*fuel
+		name:Fuel
+		desc:Just for you Sean
+
 Buildings
 
 Upgrades
@@ -57,3 +88,13 @@ Achievements
 Items
 
 Shinies
+
+// Enemies
+	*TEMPLATE
+		duration:600
+
+		// Forest
+			*rabbit
+				name:Rabbit
+				desc:A cute rabbit
+				movement:anywhere
