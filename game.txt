@@ -4,6 +4,7 @@ Let's make a game!
 	desc:An idle game for Professor Summerville's CS 4700.02
 
 Settings
+	// CSS reset from pastebin
 	stylesheet:https://pastebin.com/raw/JxMuvhXd
 
 CSS
@@ -19,6 +20,10 @@ CSS
 
 	#log {
     height: 100px;
+	}
+
+	#thing-4 {
+		//visibility: hidden
 	}
 
 Layout
@@ -38,9 +43,9 @@ Layout
 		contains:Upgrades
 		header:Upgrades
 
-	*ItemBox
-		contains:Items
-		header:Items
+	//*ItemBox
+		//contains:Items
+		//header:Items
 
 	*AchievementBox
 		contains:Achievements
@@ -79,9 +84,11 @@ Layout
 
 			*exploreForestButton
 				name:Explore Forest
-				on click:spawn rabbit
 				on click:enemyHealth=100
 				on click:enemyAttack=100
+				on click:log Found an enemy!
+				on click:show rabbitIcon
+				on click:inCombat=1
 
 		// Combat
 		*attackButton
@@ -89,21 +96,36 @@ Layout
 			tag:combatTag
 
 		// Icons
-		*rabbitButton
+		*rabbitIcon
 			tag:enemyIcon
+			name:Evil Rabbit
 			icon:https://imgur.com/7U428yg.jpg
+			hidden
+			// no text
 
 		// Memes
 		*fuelButton
 			name:Get Fuel
 			on click:yield 1 fuel
 
+
 		// Other
 		*clearLogButton
 			name:Clear Log
 			on click:clear log
 
+		*debugButton
+			name:Debug Button
+			desc:Does whatever I need to debug. Remove before actual game.
+			on click:log inCombat=[inCombat]
+
 	Resources
+		*TEMPLATE
+			always hidden
+			// Makeshift global variables
+
+			*inCombat
+
 		*TEMPLATE
 			start with:100
 
@@ -163,6 +185,9 @@ Upgrades
 
 Achievements
 
-Items
+// Items
+// These don't seem to work AT ALL
 
 Shinies
+
+Includes
