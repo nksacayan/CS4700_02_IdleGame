@@ -6,6 +6,7 @@ Let's make a game!
 Settings
 	// CSS reset from pastebin
 	stylesheet:https://pastebin.com/raw/JxMuvhXd
+	no bulk particles
 
 CSS
 	.box {
@@ -66,34 +67,63 @@ Layout
 	Buttons
 		// Training options
 		*TEMPLATE
-		on click:yield 1 xp
+		on click:
+			if (no inCombat)
+				yield 1 xp
+			else
+				log Can't increase stats while in combat!
+			end
+		end
 
 		  *trainButton
 		    name:Train
-		    on click:yield 1 attack
-				on click:yield 1 health
-				on click:log I feel stronger!
+		    on click:if (no inCombat) yield 1 strength
 
 			*studyButton
 		    name:Study
-		    on click:yield 1 magic
-				on click:yield 1 mana
+		    on click:if (no inCombat) yield 1 intelligence
+
+			*drinkButton
+				name:Drink
+				on click:if (no inCombat) yield 1 constitution
+
+			*meditateButton
+				name:Meditate
+				on click:if (no inCombat) yield 1 attunement
 
 		// Exploring
 		*TEMPLATE
+		on click:if (have inCombat) log You're already in combat!
 
 			*exploreForestButton
 				name:Explore Forest
-				on click:enemyHealth=100
-				on click:enemyAttack=100
-				on click:log Found an enemy!
-				on click:show rabbitIcon
-				on click:inCombat=1
+				on click:
+					if (no inCombat)
+						enemyHealth=10
+						enemyAttack=1
+						log Found an enemy!
+						show rabbitIcon
+						inCombat=1
+					end
+				end
 
-		// Combat
-		*attackButton
-			name:Attack
-			tag:combatTag
+		*TEMPLATE
+
+			// Combat
+			*attackButton
+				name:Attack
+				tag:combatTag
+				on click:
+					if (have inCombat)
+						yield -(strength) enemyHealth
+							if (no enemyHealth)
+								log You have defeated the monster!
+								inCombat=0
+								hide rabbitIcon
+							end
+						end
+					end
+				end
 
 		// Icons
 		*rabbitIcon
@@ -106,8 +136,8 @@ Layout
 		// Memes
 		*fuelButton
 			name:Get Fuel
+			desc:Just for you Sean
 			on click:yield 1 fuel
-
 
 		// Other
 		*clearLogButton
@@ -128,6 +158,7 @@ Layout
 
 		*TEMPLATE
 			start with:100
+			tag:combatTag
 
 		  *health
 		    name:Health
@@ -140,11 +171,17 @@ Layout
 		*TEMPLATE
 			start with:1
 
-			*attack
-				name:Attack
+			*strength
+				name:Strength
 
-			*magic
-				name:Magic
+			*constitution
+				name:Constitution
+
+			*intelligence
+				name:Intelligence
+
+			*attunement
+				name:Attunement
 
 			*level
 				name:Level
@@ -169,7 +206,6 @@ Layout
 
 			*fuel
 				name:Fuel
-				desc:Just for you Sean
 
 		// Enemy Combat Stats
 		*TEMPLATE
