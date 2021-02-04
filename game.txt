@@ -116,12 +116,16 @@ Layout
 				on click:
 					if (have inCombat)
 						yield -(strength) enemyHealth
-							if (no enemyHealth)
-								log You have defeated the monster!
-								inCombat=0
-								hide rabbitIcon
-							end
+						yield -(enemyAttack) health
+						if (no enemyHealth)
+							log You have defeated the monster!
+							hide rabbitIcon
+							yield 5 gold
+							yield 5 xp
+							inCombat=0
 						end
+					else
+						log You are not in combat!
 					end
 				end
 
@@ -159,6 +163,7 @@ Layout
 		*TEMPLATE
 			start with:100
 			tag:combatTag
+			on tick:yield 1 this
 
 		  *health
 		    name:Health
