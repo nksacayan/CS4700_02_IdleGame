@@ -74,18 +74,22 @@ Layout
 
 			  *trainButton
 			    name:Train
+					desc:Increases Strength
 			    on click:if (no inCombat) yield 1 str
 
 				*drinkButton
 					name:Drink
+					desc:Increases Constitution
 					on click:if (no inCombat) yield 1 con
 
 				*studyButton
 			    name:Study
+					desc:Increases Intelligence
 			    on click:if (no inCombat) yield 1 int
 
 				*meditateButton
 					name:Meditate
+					desc:Increases Focus
 					on click:if (no inCombat) yield 1 focus
 
 		// Exploring
@@ -94,6 +98,7 @@ Layout
 
 				*exploreForestButton
 					name:Explore Forest
+					desc:Find monsters in the forest
 					on click:
 						if (inCombat=0)
 							inCombat=1
@@ -144,13 +149,14 @@ Layout
 		// Other
 			*clearLogButton
 				name:Clear Log
+				desc:Clears the text log
 				on click:clear log
 
 			*debugButton
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					log inCombat=[inCombat]
+					day=360
 				end
 
 	Resources
@@ -178,29 +184,37 @@ Layout
 
 			*str
 				name:Strength
+				desc:Increases attack damage
 
 			*con
 				name:Constitution
+				desc:Increases health
 
 			*int
 				name:Intelligence
+				desc:Increases the power of magic (to be added)
 
 			*focus
 				name:Focus
+				desc:Increases mana
 
 			*level
 				name:Level
+				desc:Placeholder
 
 		*TEMPLATE
 
 			*xp
 				name:XP
+				desc:Your measure of experience as an adventurer
 
 			*gold
 				name:Gold
+				desc:Use this to buy things
 
 			*renown
 				name:Renown
+				desc:How famous you are. Start by killing monsters.
 
 		// Time
 			*dayIncrementer
@@ -239,6 +253,12 @@ Layout
 
 				*enemyAttack
 
+				*xpReward
+					hidden
+
+				*renownReward
+					hidden
+
 Buildings
 	// Hirelings
 		*TEMPLATE
@@ -246,7 +266,7 @@ Buildings
 
 			*commonHireling
 				name:Common Hireling
-				desc:A commoner who you can pay to do adventures for you.
+				desc:A commoner who you can pay to do adventures for you.</>At base, gives +1 gold/s and +1 renown/s.(Idk how to display current values yet)
 				cost:10 gold
 				on tick:
 					yield 1 gold
@@ -258,7 +278,7 @@ Buildings
 
 			*sponserBard
 				name:Sponser a Bard
-				desc:Pay a bard to spread your name far and wide.
+				desc:Pay a bard to spread your name far and wide.</>+2 renown/s
 				cost:10 gold
 				req:have renownMilestone1
 				on tick:
@@ -269,6 +289,12 @@ Buildings
 				end
 
 	// Gold Builders
+		*lemonadeStand
+			name:Lemonade Stand
+			desc:Start a Lemonade Stand to bring in constant income</>+2 gold/s
+			req:goldMilestone1
+			cost:10 gold
+			on tick:yield 2 gold
 
 	// Trainers
 		*strTrainer
