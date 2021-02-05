@@ -23,10 +23,6 @@ CSS
     height: 100px;
 	}
 
-	#thing-4 {
-		//visibility: hidden
-	}
-
 Layout
 	*ButtonBox
 		contains:Buttons
@@ -78,15 +74,15 @@ Layout
 
 		  *trainButton
 		    name:Train
-		    on click:if (no inCombat) yield 1 strength
+		    on click:if (no inCombat) yield 1 str
 
 			*drinkButton
 				name:Drink
-				on click:if (no inCombat) yield 1 constitution
+				on click:if (no inCombat) yield 1 con
 
 			*studyButton
 		    name:Study
-		    on click:if (no inCombat) yield 1 intelligence
+		    on click:if (no inCombat) yield 1 int
 
 			*meditateButton
 				name:Meditate
@@ -105,6 +101,8 @@ Layout
 						enemyAttack=1
 						log Found an enemy!
 						show rabbitIcon
+					else
+						log You are already in combat!
 					end
 				end
 
@@ -116,7 +114,7 @@ Layout
 				tag:combatTag
 				on click:
 					if (inCombat)
-						yield -(strength) enemyHealth
+						yield -(str) enemyHealth
 						yield -(enemyAttack) health
 						if (no enemyHealth)
 							log You have defeated the monster!
@@ -185,13 +183,13 @@ Layout
 		*TEMPLATE
 			start with:1
 
-			*strength
+			*str
 				name:Strength
 
-			*constitution
+			*con
 				name:Constitution
 
-			*intelligence
+			*int
 				name:Intelligence
 
 			*focus
@@ -211,76 +209,95 @@ Layout
 			*renown
 				name:Renown
 
+		// Time
+			*dayIncrementer
+				hidden
+
+			*day
+				name:Day
+				start with:1
+				on tick:
+					if (dayIncrementer<=8)
+						yield 1 dayIncrementer
+					else
+						dayIncrementer=0
+						yield 1 day
+					end
+				end
+
 		// Hidden until obtained
-		*TEMPLATE
-			hidden when 0
+			*TEMPLATE
+				hidden when 0
 
 		// Delete before Friday
-		*TEMPLATE
+			*TEMPLATE
 
-			//*fuel
-				//name:Fuel
+				//*fuel
+					//name:Fuel
 
 		// Enemy Combat Stats
-		*TEMPLATE
-			tag:enemyTag
+			*TEMPLATE
+				tag:enemyTag
 
-			*enemyHealth
+				*enemyHealth
 
-			*enemyAttack
+				*enemyAttack
 
 Buildings
 	// Hirelings
-	*TEMPLATE
-		req:have villageHero
+		*TEMPLATE
+			req:have renownMilestone1
 
-		*commonHireling
-			name:Common Hireling
-			desc:A commoner who you can pay to do adventures for you.
-			cost:10 gold
-			on tick:
-				yield 1 gold
-			end
+			*commonHireling
+				name:Common Hireling
+				desc:A commoner who you can pay to do adventures for you.
+				cost:10 gold
+				on tick:
+					yield 1 gold
+					yield 1 renown
+				end
 
 	// Renown Builders
-	*TEMPLATE
+		*TEMPLATE
 
-		*sponserBard
-			name:Sponser a Bard
-			desc:Pay a bard to spread your name far and wide.
-			cost:10 gold
-			req:have villageHero
-			on tick:
-				if (gold)
-					yield 1 renown
-					yield -1 gold
+			*sponserBard
+				name:Sponser a Bard
+				desc:Pay a bard to spread your name far and wide.
+				cost:10 gold
+				req:have renownMilestone1
+				on tick:
+					if (gold)
+						yield 2 renown
+						yield -1 gold
+					end
 				end
-			end
+
+	// Gold Builders
 
 	// Trainers
-		*strengthTrainer
-			req:have fledglingFighter
+		*strTrainer
+			req:have strMilestone1
 			name:Personal Trainer
-			desc:Passively increases your strength
+			desc:Passively increases your str
 			cost:10 gold
-			on tick:yield 1 strength
+			on tick:yield 1 str
 
-		*constitutionTrainer
-			req:have fledglingDrinker
+		*conTrainer
+			req:have constMilestone1
 			name:Drinking Buddy
-			desc:Passively increases your constitution
+			desc:Passively increases your con
 			cost:10 gold
-			on tick:yield 1 constitution
+			on tick:yield 1 con
 
-		*intelligenceTrainer
-			req:have fledglingMage
+		*intTrainer
+			req:have intMilestone1
 			name:Magic Tutor
-			desc:Passively increases your intelligence
+			desc:Passively increases your int
 			cost:10 gold
-			on tick:yield 1 intelligence
+			on tick:yield 1 int
 
 		*focusTrainer
-			req:have fledglingFocus
+			req:have focusMilestone1
 			name:Yoga Instructor
 			desc:Passively increases your focus
 			cost:10 gold
@@ -289,31 +306,41 @@ Buildings
 Upgrades
 
 Achievements
-	*fledglingFighter
-		name:Fledgling Fighter
-		desc:Others begin to acknowledge you as a fighter.
-		req:25 strength
+	// str levels
+		*strMilestone1
+			name:Fledgling Fighter
+			desc:Others begin to acknowledge you as a fighter.
+			req:25 str
 
-	*fledglingDrinker
-		name:Fledgling Drinker
-		desc:Your name is known in the local taverns.
-		req:25 constitution
+	// con levels
+		*constMilestone1
+			name:Fledgling Drinker
+			desc:Your name is known in the local taverns.
+			req:25 con
 
-	*fledglingMage
-		name:Fledgling Mage
-		desc:The local librarians know your name.
-		req:25 intelligence
+	// int levels
+		*intMilestone1
+			name:Fledgling Mage
+			desc:The local librarians know your name.
+			req:25 int
 
-	*fledglingFocus
-		name:Fledgling Focus
-		desc:You feel more able to focus.
-		req:25 focus
+	// Focus levels
+		*focusMilestone1
+			name:Fledgling Focus
+			desc:You feel more able to focus.
+			req:25 focus
 
 	// Renown levels
-	*villageHero
-		name:Village hero
-		desc:You are known throughout your small hamlet
-		req:25 renown
+		*renownMilestone1
+			name:Village hero
+			desc:You are known throughout your small hamlet
+			req:25 renown
+
+	// Gold levels
+		*goldMilestone1
+			name:Clinky Coins
+			desc:My small wallet is full
+			req:100 gold
 
 // Items
 // These don't seem to work AT ALL
