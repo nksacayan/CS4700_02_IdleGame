@@ -40,26 +40,18 @@ Layout
 		contains:Upgrades
 		header:Upgrades
 
-	//*ItemBox
-		//contains:Items
-		//header:Items
-
 	*AchievementBox
 		contains:Achievements
 		header:Achievements
 
+	*CombatBox
+		header:Combat Box
+		contains:tag:combatTag, tag:enemyIcon, tag:enemyTag
+		ps:hide
+
 	*LogBox
 		contains:Log
 		header:Log
-
-	*CombatBox
-		header:Combat Box
-		contains:tag:combatTag
-		ps:hide
-
-	*EnemyBox
-		header:Enemy Box
-		contains:tag:enemyTag, tag:enemyIcon
 
 	Buttons
 		// Training options
@@ -103,9 +95,13 @@ Layout
 						if (inCombat=0)
 							inCombat=1
 							enemyHealth=10
-							enemyAttack=1
+							enemyAttack=10
+							xpReward=1
+							renownReward=1
+							goldReward=1
 							log Found an enemy!
 							show rabbitIcon
+							show tag:enemyTag
 						end
 					end
 
@@ -119,12 +115,19 @@ Layout
 						if (inCombat)
 							yield -(str) enemyHealth
 							yield -(enemyAttack) health
+							if (health<=0)
+								log You were forced to flee!
+								hide rabbitIcon
+								hide tag:enemyTag
+								inCombat=0
+							end
 							if (no enemyHealth)
 								log You have defeated the monster!
 								hide rabbitIcon
-								yield 5 gold
-								yield 5 xp
-								yield 5 renown
+								hide tag:enemyTag
+								yield goldReward gold
+								yield xpReward xp
+								yield renownReward renown
 								inCombat=0
 							end
 						else
@@ -248,16 +251,22 @@ Layout
 
 			*TEMPLATE
 				tag:enemyTag
+				hidden
 
 				*enemyHealth
+					name:Enemy Health
 
 				*enemyAttack
+					name:Enemy Attack
 
 				*xpReward
-					hidden
+					name:XP Reward
 
 				*renownReward
-					hidden
+					name:Renown Reward
+
+				*goldReward
+					name:Gold Reward
 
 Buildings
 	// Hirelings
@@ -300,28 +309,28 @@ Buildings
 		*strTrainer
 			req:have strMilestone1
 			name:Personal Trainer
-			desc:Passively increases your str
+			desc:Passively increases your Strength
 			cost:10 gold
 			on tick:yield 1 str
 
 		*conTrainer
 			req:have constMilestone1
 			name:Drinking Buddy
-			desc:Passively increases your con
+			desc:Passively increases your Constitution
 			cost:10 gold
 			on tick:yield 1 con
 
 		*intTrainer
 			req:have intMilestone1
 			name:Magic Tutor
-			desc:Passively increases your int
+			desc:Passively increases your Intelligence
 			cost:10 gold
 			on tick:yield 1 int
 
 		*focusTrainer
 			req:have focusMilestone1
 			name:Yoga Instructor
-			desc:Passively increases your focus
+			desc:Passively increases your Focus
 			cost:10 gold
 			on tick:yield 1 focus
 
@@ -336,19 +345,19 @@ Achievements
 
 	// con levels
 		*constMilestone1
-			name:Fledgling Drinker
+			name:Tavern Regular
 			desc:Your name is known in the local taverns.
 			req:25 con
 
 	// int levels
 		*intMilestone1
-			name:Fledgling Mage
+			name:Smart Commoner
 			desc:The local librarians know your name.
 			req:25 int
 
 	// Focus levels
 		*focusMilestone1
-			name:Fledgling Focus
+			name:Sodoku Solver
 			desc:You feel more able to focus.
 			req:25 focus
 
@@ -362,7 +371,7 @@ Achievements
 		*goldMilestone1
 			name:Clinky Coins
 			desc:My small wallet is full
-			req:100 gold
+			req:50 gold
 
 // Items
 // These don't seem to work AT ALL
