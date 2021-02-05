@@ -23,14 +23,18 @@ CSS
     height: 100px;
 	}
 
-Layout
-	*ButtonBox
-		contains:Buttons
-		header:Buttons
+	#overflow {
+		overflow: auto;
+	}
 
+Layout
 	*ResourceBox
 		contains:Resources
 		header:Resources
+
+	*ButtonBox
+		contains:Buttons
+		header:Buttons
 
 	*BuildingBox
 		contains:Buildings
@@ -46,7 +50,7 @@ Layout
 
 	*CombatBox
 		header:Combat Box
-		contains:tag:combatTag, tag:enemyIcon, tag:enemyTag
+		contains:tag:combatStats, tag:exploreTag, tag:combatActions, tag:enemyIcon, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -87,6 +91,7 @@ Layout
 		// Exploring
 			*TEMPLATE
 				on click:if (have inCombat) log You're already in combat!
+				tag:exploreTag
 
 				*exploreForestButton
 					name:Explore Forest
@@ -101,7 +106,9 @@ Layout
 							goldReward=5
 							log Found an enemy!
 							show rabbitIcon
-							show tag:enemyTag
+							show tag:enemyStats
+							hide tag:exploreTag
+							show tag:combatActions
 						end
 					end
 
@@ -110,25 +117,31 @@ Layout
 
 				*attackButton
 					name:Attack
-					tag:combatTag
+					tag:combatActions
+					hidden
 					on click:
 						if (inCombat)
-							yield -(str) enemyHealth
-							yield -(enemyAttack) health
+							lose str enemyHealth
+							log Did [str] damage!
+							lose enemyAttack health
+							log Took [enemyAttack] damage!
 							if (health<=0)
-								log You were forced to flee!
+								log You ran out of health and fled!
 								hide rabbitIcon
-								hide tag:enemyTag
+								hide tag:enemyStats
+								show tag:exploreTag
+								hide tag:combatActions
 								inCombat=0
-							end
-							if (no enemyHealth)
+							else if (no enemyHealth)
 								log You have defeated the monster!
 								hide rabbitIcon
-								hide tag:enemyTag
+								hide tag:enemyStats
 								yield goldReward gold
 								yield xpReward xp
 								yield renownReward renown
 								inCombat=0
+								hide tag:combatActions
+								show tag:exploreTag
 							end
 						else
 							log You are not in combat!
@@ -169,7 +182,7 @@ Layout
 		// Player combat stats
 		*TEMPLATE
 			start with:100
-			tag:combatTag
+			tag:combatStats
 
 		  *health
 		    name:Health
@@ -255,7 +268,7 @@ Layout
 				hidden
 
 			*TEMPLATE
-				tag:enemyTag
+				tag:enemyStats
 				hidden
 
 				*enemyHealth
@@ -278,8 +291,8 @@ Buildings
 		*TEMPLATE
 			req:have renownMilestone1
 
-			*commonHireling
-				name:Common Hireling
+			*hireling1
+				name:Adventurous Commoner
 				desc:A commoner who you can pay to do adventures for you.</>At base, gives +1 gold/s and +1 renown/s.(Idk how to display current values yet)
 				cost:10 gold
 				on tick:
@@ -292,7 +305,7 @@ Buildings
 
 			*sponserBard
 				name:Sponser a Bard
-				desc:Pay a bard to spread your name far and wide.</>+2 renown/s
+				desc:Pay a bard to spread your name far and wide.</>+2 renown/s, but -1 gold/s
 				cost:10 gold
 				req:have renownMilestone1
 				on tick:
@@ -368,6 +381,12 @@ Upgrades
 		passive:increase yield of meditateButton by 1
 
 	// Building Upgrades
+		*hirelingUpgrade1
+			req:renownMilestone1
+			cost:100 gold
+			name:Adventuring Lessons
+			desc:Teach your commoners to fight! x2 yield/s on commoners
+			passive:multiply gain of hireling1 by 2
 
 	// Passive Upgrades
 	*regenUpgrade1
