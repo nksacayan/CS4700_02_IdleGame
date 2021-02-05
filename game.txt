@@ -59,6 +59,7 @@ Layout
 	*CombatBox
 		header:Combat Box
 		contains:tag:combatTag
+		ps:hide
 
 	*EnemyBox
 		header:Enemy Box
@@ -79,31 +80,31 @@ Layout
 		    name:Train
 		    on click:if (no inCombat) yield 1 strength
 
-			*studyButton
-		    name:Study
-		    on click:if (no inCombat) yield 1 intelligence
-
 			*drinkButton
 				name:Drink
 				on click:if (no inCombat) yield 1 constitution
 
+			*studyButton
+		    name:Study
+		    on click:if (no inCombat) yield 1 intelligence
+
 			*meditateButton
 				name:Meditate
-				on click:if (no inCombat) yield 1 attunement
+				on click:if (no inCombat) yield 1 focus
 
 		// Exploring
 		*TEMPLATE
-		on click:if (have inCombat) log You're already in combat!
+		//on click:if (have inCombat) log You're already in combat!
 
 			*exploreForestButton
 				name:Explore Forest
 				on click:
-					if (no inCombat)
+					if (inCombat=0)
+						inCombat=1
 						enemyHealth=10
 						enemyAttack=1
 						log Found an enemy!
 						show rabbitIcon
-						inCombat=1
 					end
 				end
 
@@ -114,7 +115,7 @@ Layout
 				name:Attack
 				tag:combatTag
 				on click:
-					if (have inCombat)
+					if (inCombat)
 						yield -(strength) enemyHealth
 						yield -(enemyAttack) health
 						if (no enemyHealth)
@@ -122,6 +123,7 @@ Layout
 							hide rabbitIcon
 							yield 5 gold
 							yield 5 xp
+							yield 5 renown
 							inCombat=0
 						end
 					else
@@ -138,10 +140,10 @@ Layout
 			// no text
 
 		// Memes
-		*fuelButton
-			name:Get Fuel
-			desc:Just for you Sean
-			on click:yield 1 fuel
+		//*fuelButton
+			//name:Get Fuel
+			//desc:Just for you Sean
+			//on click:yield 1 fuel
 
 		// Other
 		*clearLogButton
@@ -151,27 +153,34 @@ Layout
 		*debugButton
 			name:Debug Button
 			desc:Does whatever I need to debug. Remove before actual game.
-			on click:log inCombat=[inCombat]
+			on click:
+				log inCombat=[inCombat]
+				log testStat=[testStat]
+			end
 
 	Resources
+		// Makeshift global variables
 		*TEMPLATE
-			always hidden
-			// Makeshift global variables
+			hidden
 
 			*inCombat
 
+			*testStat
+
+		// Player combat stats
 		*TEMPLATE
 			start with:100
 			tag:combatTag
-			on tick:yield 1 this
 
 		  *health
 		    name:Health
 				show max
+				on tick:if (no inCombat and this<health:max) yield 1 this
 
 			*mana
 				name:Mana
 				show max
+				on tick:if (no inCombat and this<mana:max) yield 1 this
 
 		*TEMPLATE
 			start with:1
@@ -185,8 +194,8 @@ Layout
 			*intelligence
 				name:Intelligence
 
-			*attunement
-				name:Attunement
+			*focus
+				name:Focus
 
 			*level
 				name:Level
@@ -196,21 +205,21 @@ Layout
 			*xp
 				name:XP
 
-		// Hidden until obtained
-		*TEMPLATE
-			hidden when 0
-
 			*gold
 				name:Gold
 
 			*renown
 				name:Renown
 
+		// Hidden until obtained
+		*TEMPLATE
+			hidden when 0
+
 		// Delete before Friday
 		*TEMPLATE
 
-			*fuel
-				name:Fuel
+			//*fuel
+				//name:Fuel
 
 		// Enemy Combat Stats
 		*TEMPLATE
@@ -221,10 +230,90 @@ Layout
 			*enemyAttack
 
 Buildings
+	// Hirelings
+	*TEMPLATE
+		req:have villageHero
+
+		*commonHireling
+			name:Common Hireling
+			desc:A commoner who you can pay to do adventures for you.
+			cost:10 gold
+			on tick:
+				yield 1 gold
+			end
+
+	// Renown Builders
+	*TEMPLATE
+
+		*sponserBard
+			name:Sponser a Bard
+			desc:Pay a bard to spread your name far and wide.
+			cost:10 gold
+			req:have villageHero
+			on tick:
+				if (gold)
+					yield 1 renown
+					yield -1 gold
+				end
+			end
+
+	// Trainers
+		*strengthTrainer
+			req:have fledglingFighter
+			name:Personal Trainer
+			desc:Passively increases your strength
+			cost:10 gold
+			on tick:yield 1 strength
+
+		*constitutionTrainer
+			req:have fledglingDrinker
+			name:Drinking Buddy
+			desc:Passively increases your constitution
+			cost:10 gold
+			on tick:yield 1 constitution
+
+		*intelligenceTrainer
+			req:have fledglingMage
+			name:Magic Tutor
+			desc:Passively increases your intelligence
+			cost:10 gold
+			on tick:yield 1 intelligence
+
+		*focusTrainer
+			req:have fledglingFocus
+			name:Yoga Instructor
+			desc:Passively increases your focus
+			cost:10 gold
+			on tick:yield 1 focus
 
 Upgrades
 
 Achievements
+	*fledglingFighter
+		name:Fledgling Fighter
+		desc:Others begin to acknowledge you as a fighter.
+		req:25 strength
+
+	*fledglingDrinker
+		name:Fledgling Drinker
+		desc:Your name is known in the local taverns.
+		req:25 constitution
+
+	*fledglingMage
+		name:Fledgling Mage
+		desc:The local librarians know your name.
+		req:25 intelligence
+
+	*fledglingFocus
+		name:Fledgling Focus
+		desc:You feel more able to focus.
+		req:25 focus
+
+	// Renown levels
+	*villageHero
+		name:Village hero
+		desc:You are known throughout your small hamlet
+		req:25 renown
 
 // Items
 // These don't seem to work AT ALL
