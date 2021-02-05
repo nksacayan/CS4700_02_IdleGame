@@ -96,9 +96,9 @@ Layout
 							inCombat=1
 							enemyHealth=10
 							enemyAttack=10
-							xpReward=1
-							renownReward=1
-							goldReward=1
+							xpReward=5
+							renownReward=5
+							goldReward=5
 							log Found an enemy!
 							show rabbitIcon
 							show tag:enemyTag
@@ -141,7 +141,6 @@ Layout
 				name:Evil Rabbit
 				icon:https://imgur.com/7U428yg.jpg
 				hidden
-				// no text
 
 		// Memes
 			//*fuelButton
@@ -174,13 +173,15 @@ Layout
 
 		  *health
 		    name:Health
-				show max
-				on tick:if (no inCombat and this<health:max) yield 1 this
+				on tick:if (no inCombat and this<maxHealth) yield 1 this
+
+			*maxHealth
 
 			*mana
 				name:Mana
-				show max
-				on tick:if (no inCombat and this<mana:max) yield 1 this
+				on tick:if (no inCombat and this<maxMana) yield 1 this
+
+			*maxMana
 
 		*TEMPLATE
 			start with:1
@@ -192,6 +193,8 @@ Layout
 			*con
 				name:Constitution
 				desc:Increases health
+				on earn:yield 1 maxHealth
+				on lose:lose 1 maxHealth
 
 			*int
 				name:Intelligence
@@ -200,6 +203,8 @@ Layout
 			*focus
 				name:Focus
 				desc:Increases mana
+				on earn:yield 1 maxMana
+				on lose:lose 1 maxMana
 
 			*level
 				name:Level
@@ -293,12 +298,13 @@ Buildings
 				on tick:
 					if (gold)
 						yield 2 renown
-						yield -1 gold
+						lose 1 gold
 					end
 				end
 
 	// Gold Builders
 		*lemonadeStand
+			// Make a grape reference
 			name:Lemonade Stand
 			desc:Start a Lemonade Stand to bring in constant income</>+2 gold/s
 			req:goldMilestone1
@@ -335,6 +341,40 @@ Buildings
 			on tick:yield 1 focus
 
 Upgrades
+	// Active Upgrades
+	*trainingUpgrade1
+		name:Practice Sword
+		desc:+1 Strength per Train
+		cost:10 gold
+		passive:increase yield of trainButton by 1
+
+	// Add kidney meme somewhere
+	*drinkingUpgrade1
+		name:Bigger Mug
+		desc:+1 Constitution per Drink
+		cost:10 gold
+		passive:increase yield of drinkButton by 1
+
+	*studyingUpgrade1
+		name:Set of Bookmarks
+		desc:+1 Intelligence per Study
+		cost:10 gold
+		passive:increase yield of studyButton by 1
+
+	*meditateUpgrade1
+		name:Scented Candles
+		desc:+1 Focus per Meditate
+		cost:10 gold
+		passive:increase yield of meditateButton by 1
+
+	// Building Upgrades
+
+	// Passive Upgrades
+	*regenUpgrade1
+		name:First Aid Kit
+		desc:+1 passive Health Regen
+		cost:10 gold
+		passive:increase yield of health by 1
 
 Achievements
 	// str levels
