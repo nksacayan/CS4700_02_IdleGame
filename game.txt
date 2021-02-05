@@ -63,107 +63,100 @@ Layout
 
 	Buttons
 		// Training options
-		*TEMPLATE
-		on click:
-			if (no inCombat)
-				yield 1 xp
-			else
-				log Can't increase stats while in combat!
-			end
-		end
+			*TEMPLATE
+				on click:
+					if (no inCombat)
+						yield 1 xp
+					else
+						log Can't increase stats while in combat!
+					end
+				end
 
-		  *trainButton
-		    name:Train
-		    on click:if (no inCombat) yield 1 str
+			  *trainButton
+			    name:Train
+			    on click:if (no inCombat) yield 1 str
 
-			*drinkButton
-				name:Drink
-				on click:if (no inCombat) yield 1 con
+				*drinkButton
+					name:Drink
+					on click:if (no inCombat) yield 1 con
 
-			*studyButton
-		    name:Study
-		    on click:if (no inCombat) yield 1 int
+				*studyButton
+			    name:Study
+			    on click:if (no inCombat) yield 1 int
 
-			*meditateButton
-				name:Meditate
-				on click:if (no inCombat) yield 1 focus
+				*meditateButton
+					name:Meditate
+					on click:if (no inCombat) yield 1 focus
 
 		// Exploring
-		*TEMPLATE
-		//on click:if (have inCombat) log You're already in combat!
+			*TEMPLATE
+				on click:if (have inCombat) log You're already in combat!
 
-			*exploreForestButton
-				name:Explore Forest
-				on click:
-					if (inCombat=0)
-						inCombat=1
-						enemyHealth=10
-						enemyAttack=1
-						log Found an enemy!
-						show rabbitIcon
-					else
-						log You are already in combat!
-					end
-				end
-
-		*TEMPLATE
-
-			// Combat
-			*attackButton
-				name:Attack
-				tag:combatTag
-				on click:
-					if (inCombat)
-						yield -(str) enemyHealth
-						yield -(enemyAttack) health
-						if (no enemyHealth)
-							log You have defeated the monster!
-							hide rabbitIcon
-							yield 5 gold
-							yield 5 xp
-							yield 5 renown
-							inCombat=0
+				*exploreForestButton
+					name:Explore Forest
+					on click:
+						if (inCombat=0)
+							inCombat=1
+							enemyHealth=10
+							enemyAttack=1
+							log Found an enemy!
+							show rabbitIcon
 						end
-					else
-						log You are not in combat!
 					end
-				end
+
+		// Combat
+			*TEMPLATE
+
+				*attackButton
+					name:Attack
+					tag:combatTag
+					on click:
+						if (inCombat)
+							yield -(str) enemyHealth
+							yield -(enemyAttack) health
+							if (no enemyHealth)
+								log You have defeated the monster!
+								hide rabbitIcon
+								yield 5 gold
+								yield 5 xp
+								yield 5 renown
+								inCombat=0
+							end
+						else
+							log You are not in combat!
+						end
+					end
 
 		// Icons
-		*rabbitIcon
-			tag:enemyIcon
-			name:Evil Rabbit
-			icon:https://imgur.com/7U428yg.jpg
-			hidden
-			// no text
+			*rabbitIcon
+				tag:enemyIcon
+				name:Evil Rabbit
+				icon:https://imgur.com/7U428yg.jpg
+				hidden
+				// no text
 
 		// Memes
-		//*fuelButton
-			//name:Get Fuel
-			//desc:Just for you Sean
-			//on click:yield 1 fuel
+			//*fuelButton
+				//name:Get Fuel
+				//desc:Just for you Sean
+				//on click:yield 1 fuel
 
 		// Other
-		*clearLogButton
-			name:Clear Log
-			on click:clear log
+			*clearLogButton
+				name:Clear Log
+				on click:clear log
 
-		*debugButton
-			name:Debug Button
-			desc:Does whatever I need to debug. Remove before actual game.
-			on click:
-				log inCombat=[inCombat]
-				log testStat=[testStat]
-			end
+			*debugButton
+				name:Debug Button
+				desc:Does whatever I need to debug. Remove before actual game.
+				on click:
+					log inCombat=[inCombat]
+				end
 
 	Resources
 		// Makeshift global variables
 		*TEMPLATE
 			hidden
-
-			*inCombat
-
-			*testStat
 
 		// Player combat stats
 		*TEMPLATE
@@ -236,6 +229,9 @@ Layout
 					//name:Fuel
 
 		// Enemy Combat Stats
+			*inCombat
+				hidden
+
 			*TEMPLATE
 				tag:enemyTag
 
