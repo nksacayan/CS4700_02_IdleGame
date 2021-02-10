@@ -24,13 +24,13 @@ CSS
 	}
 
 Layout
-	*ButtonBox
-		contains:Buttons
-		header:Buttons
-
 	*ResourceBox
 		contains:Resources
 		header:Resources
+
+	*ButtonBox
+		contains:Buttons
+		header:Buttons
 
 	*BuildingBox
 		contains:Buildings
@@ -46,7 +46,7 @@ Layout
 
 	*CombatBox
 		header:Combat Box
-		contains:tag:combatStats, tag:combatActions, tag:spells, tag:items, tag:enemyStats
+		contains:tag:combatStats, tag:fight, tag:combatActions, tag:spells, tag:items, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -85,9 +85,10 @@ Layout
 						log You're already in combat!
 					else
 						log You've found an enemy!
+						show tag:enemyStats
+						show tag:combatActions
+						hide tag:fight
 					end
-					show tag:enemyStats
-					show tag:combatActions
 				end
 				tag:fight
 
@@ -157,6 +158,10 @@ Layout
 
 				*spellButton
 					name:Spells
+					on click:
+						show tag:spells
+						hide tag:combatActions
+					end
 
 				*itemButton
 					name:Items
@@ -180,7 +185,24 @@ Layout
 					desc:Heals self by *placeholder*
 					on click:
 					end
+
+				*spellButtonReturn
+					name:Back
+					desc:Hide spells and return to combat actions.
+					on click:
+						show tag:combatActions
+						hide tag:spells
+					end
+		
+		// Items
+			*TEMPLATE
+			hidden
+			tag:items
 				
+			*itemButtonReturn
+					name:Back
+					desc:Hide items and return to combat actions.
+					hidden
 
 		// Other
 		*TEMPLATE
@@ -194,7 +216,8 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					toast Test toast!
+					toast Hid ResourceBox!
+					hide ResourceBox
 				end
 
 	Resources
@@ -320,10 +343,7 @@ Buildings
 				cost:10 gold
 				req:have renownMilestone1
 				on tick:
-					if (gold)
 						yield 2 renown
-						lose 1 gold
-					end
 				end
 
 	// Gold Builders
@@ -464,6 +484,7 @@ Includes
 		inCombat=0
 		hide tag:enemyStats
 		hide tag:combatActions
+		show tag:fight
 
 	*include winBattle
 		yield enemyGold gold
