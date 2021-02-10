@@ -46,7 +46,7 @@ Layout
 
 	*CombatBox
 		header:Combat Box
-		contains:tag:combatStats, tag:spells, tag:enemyIcon, tag:enemyStats
+		contains:tag:combatStats, tag:combatActions, tag:spells, tag:enemyIcon, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -56,18 +56,12 @@ Layout
 	Buttons
 		// Training options
 			*TEMPLATE
-				on click:
-					if (no inCombat)
-						yield 1 xp
-					else
-						log Can't increase stats while in combat!
-					end
-				end
+				on click:if (inCombat) log Can't increase stats while in combat!						
 
 			  *trainButton
-			    name:Train
+			    	name:Train
 					desc:Increases Strength
-			    on click:if (no inCombat) yield 1 str
+			    	on click:if (no inCombat) yield 1 str
 
 				*drinkButton
 					name:Drink
@@ -75,42 +69,65 @@ Layout
 					on click:if (no inCombat) yield 1 con
 
 				*studyButton
-			    name:Study
+			    	name:Study
 					desc:Increases Intelligence
-			    on click:if (no inCombat) yield 1 int
+			    	on click:if (no inCombat) yield 1 int
 
 				*meditateButton
 					name:Meditate
 					desc:Increases Focus
 					on click:if (no inCombat) yield 1 focus
 
-		// Exploring
+		// Fights
 			*TEMPLATE
 				on click:if (have inCombat) log You're already in combat!
+				tag:fight
 
-				*exploreForestButton
-					name:Explore Forest
-					desc:Find monsters in the forest
+				//*exploreForestButton
+				//	name:Explore Forest
+				//	desc:Find monsters in the forest
+				//	on click:
+				//		if (inCombat=0)
+				//			inCombat=1
+				//			enemyHealth=10
+				//			enemyAttack=10
+				//			enemyRenown=5
+				//			enemyGold=5
+				//			log Found an enemy!
+				//			show tag:enemyStats
+				//
+				//		end
+				//	end
+
+				*fight1
+					name:First Monster
 					on click:
-						if (inCombat=0)
-							inCombat=1
-							enemyHealth=10
-							enemyAttack=10
-							xpReward=5
-							renownReward=5
-							goldReward=5
-							log Found an enemy!
-							show tag:enemyStats
-		
-						end
+						yield 100 enemyHealth
+						yield 100 enemyAttack
+						
+						[include startCombat]
+					end
+
+				*fight2
+					name:Second Monster
+					on click:
+						yield 1000 enemyHealth
+						yield 1000 enemyAttack
+					end
+
+				*fight3
+					name:Final Monster
+					on click:
+						yield 10000 enemyHealth
+						yield 10000 enemyAttack
 					end
 
 		// Combat
 			*TEMPLATE
+				tag:combatActions
 
 				*attackButton
 					name:Attack
-					tag:combatStats
 		
 					on click:
 						if (inCombat)
@@ -126,15 +143,23 @@ Layout
 								log You have defeated the monster!
 								hide tag:enemyStats
 			
-								yield goldReward gold
-								yield xpReward xp
-								yield renownReward renown
+								yield enemyGold gold
+								yield enemyRenown renown
 								inCombat=0
 							end
 						else
 							log You are not in combat!
 						end
 					end
+
+				*fleeButton
+					name:Flee
+
+				*spellButton
+					name:Spells
+
+				*itemButton
+					name:Items
 
 		// Spellcasting
 			*TEMPLATE
@@ -150,6 +175,10 @@ Layout
 					end
 
 				*heal
+					name:Heal
+					desc:Heals self by *placeholder*
+					on click:
+					end
 
 		// Enemies
 			*TEMPLATE
@@ -169,7 +198,7 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-
+					toast Test toast!
 				end
 
 	Resources
@@ -226,10 +255,6 @@ Layout
 
 		*TEMPLATE
 
-			*xp
-				name:XP
-				desc:Your measure of experience as an adventurer
-
 			*gold
 				name:Gold
 				desc:Use this to buy things
@@ -268,14 +293,13 @@ Layout
 				*enemyAttack
 					name:Enemy Attack
 
-				*xpReward
-					name:XP Reward
-
-				*renownReward
+				*enemyRenown
 					name:Renown Reward
+					desc:How much renown you get for killing this enemy.
 
-				*goldReward
+				*enemyGold
 					name:Gold Reward
+					desc:How much gold you get for killing this enemy.
 
 Buildings
 	// Hirelings
@@ -450,4 +474,12 @@ Includes
 			end
 		else
 			log Error:Tried to checkBattleStatus while not in combat!
+		end
+
+	*include startCombat
+		if (inCombat)
+			log Error:Tried to startCombat while already in combat!
+		else
+			inCombat=1
+			show tag:enemyStats
 		end
