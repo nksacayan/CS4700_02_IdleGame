@@ -46,7 +46,7 @@ Layout
 
 	*CombatBox
 		header:Combat Box
-		contains:tag:combatTag, tag:enemyIcon, tag:enemyTag
+		contains:tag:combatStats, tag:spells, tag:enemyIcon, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -100,8 +100,8 @@ Layout
 							renownReward=5
 							goldReward=5
 							log Found an enemy!
-							show rabbitIcon
-							show tag:enemyTag
+							show tag:enemyStats
+		
 						end
 					end
 
@@ -110,21 +110,22 @@ Layout
 
 				*attackButton
 					name:Attack
-					tag:combatTag
+					tag:combatStats
+		
 					on click:
 						if (inCombat)
 							yield -(str) enemyHealth
 							yield -(enemyAttack) health
 							if (health<=0)
 								log You were forced to flee!
-								hide rabbitIcon
-								hide tag:enemyTag
+								hide tag:enemyStats
+			
 								inCombat=0
 							end
 							if (no enemyHealth)
 								log You have defeated the monster!
-								hide rabbitIcon
-								hide tag:enemyTag
+								hide tag:enemyStats
+			
 								yield goldReward gold
 								yield xpReward xp
 								yield renownReward renown
@@ -135,18 +136,28 @@ Layout
 						end
 					end
 
-		// Icons
-			*rabbitIcon
-				tag:enemyIcon
-				name:Evil Rabbit
-				icon:https://imgur.com/7U428yg.jpg
-				hidden
+		// Spellcasting
+			*TEMPLATE
+			tag:spells
 
-		// Memes
-			//*fuelButton
-				//name:Get Fuel
-				//desc:Just for you Sean
-				//on click:yield 1 fuel
+				*fireball
+					name:Fireball
+					desc:Lobs a fireball at your enemies for 2*intelligence ([2*int]) damage!
+					on click:
+						// [include doDamage %damage="2*int"]
+						lose (2*int) enemyHealth
+						lose (int/4) mana
+					end
+
+				*heal
+
+		// Enemies
+			*TEMPLATE
+				//*rabbitIcon
+					//tag:enemyIcon
+					//name:Evil Rabbit
+					//icon:https://imgur.com/7U428yg.jpg
+					//hidden
 
 		// Other
 			*clearLogButton
@@ -158,7 +169,7 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					day=360
+
 				end
 
 	Resources
@@ -169,19 +180,22 @@ Layout
 		// Player combat stats
 		*TEMPLATE
 			start with:100
-			tag:combatTag
+			tag:combatStats
 
-		  *health
-		    name:Health
-				on tick:if (no inCombat and this<maxHealth) yield 1 this
+
+			*health
+		    	name:Health
+					on tick:if (no inCombat and this<maxHealth) yield 1 this
 
 			*maxHealth
+				name:Max Health
 
 			*mana
 				name:Mana
 				on tick:if (no inCombat and this<maxMana) yield 1 this
 
 			*maxMana
+				name:Max Mana
 
 		*TEMPLATE
 			start with:1
@@ -240,22 +254,12 @@ Layout
 					end
 				end
 
-		// Hidden until obtained
-			*TEMPLATE
-				hidden when 0
-
-		// Delete before Friday
-			*TEMPLATE
-
-				//*fuel
-					//name:Fuel
-
 		// Enemy Combat Stats
 			*inCombat
 				hidden
 
 			*TEMPLATE
-				tag:enemyTag
+				tag:enemyStats
 				hidden
 
 				*enemyHealth
@@ -413,9 +417,37 @@ Achievements
 			desc:My small wallet is full
 			req:50 gold
 
-// Items
-// These don't seem to work AT ALL
-
 Shinies
 
 Includes
+	*include enemyTurn
+		if (inCombat)
+			lose enemyAttack health
+			Log The enemy attacks!
+			Log You took [enemyAttack] damage!
+		else
+			Log Error:Tried to run enemyTurn while out of combat!
+		end
+
+	*include doDamage %damage
+		if (inCombat)
+			lose %damage enemyHealth
+			Log You dealt %damage damage!
+		else
+			Log Error:Tried to doDamage while out of combat!
+		end
+
+	*include testInclude %stringParameter="Empty stringParameter" %intParameter="100"
+		log You hit the test include!
+		log The stringParameter is [%stringParameter]
+		log Going to increase days by [%intParameter]
+		yield [%intParameter] day
+
+	*include checkBattleStatus
+		if (inCombat)
+			if (health<=0)
+				log Placeholder
+			end
+		else
+			log Error:Tried to checkBattleStatus while not in combat!
+		end
