@@ -80,31 +80,23 @@ Layout
 
 		// Fights
 			*TEMPLATE
-				on click:if (have inCombat) log You're already in combat!
+				on click:
+					if (have inCombat) 
+						log You're already in combat!
+					else
+						log You've found an enemy!
+					end
+					show tag:enemyStats
+					show tag:combatActions
+				end
 				tag:fight
-
-				//*exploreForestButton
-				//	name:Explore Forest
-				//	desc:Find monsters in the forest
-				//	on click:
-				//		if (inCombat=0)
-				//			inCombat=1
-				//			enemyHealth=10
-				//			enemyAttack=10
-				//			enemyRenown=5
-				//			enemyGold=5
-				//			log Found an enemy!
-				//			show tag:enemyStats
-				//
-				//		end
-				//	end
 
 				*fight1
 					name:First Monster
 					on click:
 						if (no inCombat)
-							yield 100 enemyHealth
-							yield 100 enemyAttack
+							yield 10 enemyHealth
+							yield 10 enemyAttack
 							yield 10 enemyGold
 							yield 10 enemyRenown
 						end
@@ -115,8 +107,8 @@ Layout
 					name:Second Monster
 					on click:
 						if (no inCombat)
-							yield 1000 enemyHealth
-							yield 1000 enemyAttack
+							yield 100 enemyHealth
+							yield 100 enemyAttack
 							yield 100 enemyGold
 							yield 100 enemyRenown
 						end
@@ -127,8 +119,8 @@ Layout
 					name:Final Monster
 					on click:
 						if (no inCombat)
-							yield 10000 enemyHealth
-							yield 10000 enemyAttack
+							yield 1000 enemyHealth
+							yield 1000 enemyAttack
 							yield 1000 enemyGold
 							yield 1000 enemyRenown
 						end
@@ -137,6 +129,7 @@ Layout
 
 		// Combat
 			*TEMPLATE
+				hidden
 				tag:combatActions
 
 				*attackButton
@@ -144,7 +137,7 @@ Layout
 					on click:
 						if (inCombat)
 							// do damage
-							[include doDamage %damage="str"]
+							[include applyAttack]
 							// take damage
 							[include enemyTurn]
 							// check battle status
@@ -156,6 +149,11 @@ Layout
 
 				*fleeButton
 					name:Flee
+					desc:Flee the battle!
+					on click:
+						[include endCombat]
+						log You flee combat!
+					end
 
 				*spellButton
 					name:Spells
@@ -165,13 +163,14 @@ Layout
 
 		// Spellcasting
 			*TEMPLATE
+			hidden
 			tag:spells
 
 				*fireball
 					name:Fireball
 					desc:Lobs a fireball at your enemies for 2*intelligence ([2*int]) damage!
 					on click:
-						// [include doDamage %damage="2*int"]
+						// [include applyAttack %damage="2*int"]
 						lose (2*int) enemyHealth
 						lose (int/4) mana
 					end
@@ -181,12 +180,11 @@ Layout
 					desc:Heals self by *placeholder*
 					on click:
 					end
-
-		// Enemies
-			*TEMPLATE
 				
 
 		// Other
+		*TEMPLATE
+
 			*clearLogButton
 				name:Clear Log
 				desc:Clears the text log
@@ -445,18 +443,17 @@ Includes
 	*include enemyTurn
 		if (inCombat)
 			lose enemyAttack health
-			log The enemy attacks!
-			log You took [enemyAttack] damage!
+			log The enemy attacks and you take [enemyAttack] damage!
 		else
 			log Error:Tried to run enemyTurn while out of combat!
 		end
 
-	*include doDamage %damage="9"
+	*include applyAttack
 		if (inCombat)
-			lose [%damage] enemyHealth
-			log You dealt [%damage] damage!
+			lose str enemyHealth
+			log You attack and deal [str] damage!
 		else
-			log Error:Tried to doDamage while out of combat!
+			log Error:Tried to applyAttack while out of combat!
 		end
 
 	*include endCombat
@@ -465,6 +462,8 @@ Includes
 		enemyGold=0
 		enemyRenown=0
 		inCombat=0
+		hide tag:enemyStats
+		hide tag:combatActions
 
 	*include winBattle
 		yield enemyGold gold
