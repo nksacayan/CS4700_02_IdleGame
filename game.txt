@@ -107,6 +107,7 @@ Layout
 
 				*fight2
 					name:Second Monster
+					hidden
 					on click:
 						if (no inCombat)
 							yield 100 enemyHealth
@@ -120,6 +121,7 @@ Layout
 
 				*fight3
 					name:Final Monster
+					hidden
 					on click:
 						if (no inCombat)
 							yield 1000 enemyHealth
@@ -452,9 +454,11 @@ Achievements
 
 			*fight1Win
 				req:enemyAchievement=10
+				on earn:show fight2
 
 			*fight2Win
 				req:enemyAchievement=20
+				on earn:show fight3
 
 			*fight3Win
 				req:enemyAchievement=30
@@ -487,7 +491,9 @@ Includes
 		enemyAchievement=0
 		hide tag:enemyStats
 		hide tag:combatActions
-		show tag:fight
+		show fight1
+		if (fight1Win) show fight2
+		if (fight2Win) show fight3
 
 	*include winBattle
 		if (enemyAchievement=1)
