@@ -100,6 +100,7 @@ Layout
 							yield 10 enemyAttack
 							yield 10 enemyGold
 							yield 10 enemyRenown
+							enemyAchievement=1
 						end
 						[include startCombat]
 					end
@@ -112,6 +113,7 @@ Layout
 							yield 100 enemyAttack
 							yield 100 enemyGold
 							yield 100 enemyRenown
+							enemyAchievement=2
 						end
 						[include startCombat]
 					end
@@ -124,6 +126,7 @@ Layout
 							yield 1000 enemyAttack
 							yield 1000 enemyGold
 							yield 1000 enemyRenown
+							enemyAchievement=3
 						end
 						[include startCombat]
 					end
@@ -225,11 +228,12 @@ Layout
 		*TEMPLATE
 			hidden
 
+			*enemyAchievement
+
 		// Player combat stats
 		*TEMPLATE
 			start with:100
 			tag:combatStats
-
 
 			*health
 		    	name:Health
@@ -281,22 +285,6 @@ Layout
 			*renown
 				name:Renown
 				desc:How famous you are. Start by killing monsters.
-
-		// Time
-			*dayIncrementer
-				hidden
-
-			*day
-				name:Day
-				start with:1
-				on tick:
-					if (dayIncrementer<=8)
-						yield 1 dayIncrementer
-					else
-						dayIncrementer=0
-						yield 1 day
-					end
-				end
 
 		// Enemy Combat Stats
 			*inCombat
@@ -421,6 +409,8 @@ Upgrades
 		passive:increase yield of health by 1
 
 Achievements
+	*TEMPLATE
+
 	// str levels
 		*strMilestone1
 			name:Fledgling Fighter
@@ -457,6 +447,18 @@ Achievements
 			desc:My small wallet is full
 			req:50 gold
 
+	// Fights Complete
+		*TEMPLATE
+
+			*fight1Win
+				req:enemyAchievement=10
+
+			*fight2Win
+				req:enemyAchievement=20
+
+			*fight3Win
+				req:enemyAchievement=30
+
 Shinies
 
 Includes
@@ -482,11 +484,19 @@ Includes
 		enemyGold=0
 		enemyRenown=0
 		inCombat=0
+		enemyAchievement=0
 		hide tag:enemyStats
 		hide tag:combatActions
 		show tag:fight
 
 	*include winBattle
+		if (enemyAchievement=1)
+			yield fight1Win
+		else if (enemyAchievement=2)
+			yield fight2Win
+		else if (enemyAchievement=3)
+			yield fight3Win
+		end
 		yield enemyGold gold
 		yield enemyRenown renown
 		log You have defeated the enemy!
