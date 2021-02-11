@@ -23,10 +23,6 @@ CSS
     height: 100px;
 	}
 
-	#overflow {
-		overflow: auto;
-	}
-
 Layout
 	*ResourceBox
 		contains:Resources
@@ -50,7 +46,7 @@ Layout
 
 	*CombatBox
 		header:Combat Box
-		contains:tag:combatStats, tag:exploreTag, tag:combatActions, tag:enemyIcon, tag:enemyStats
+		contains:tag:combatStats, tag:fight, tag:combatActions, tag:spells, tag:items, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -60,18 +56,12 @@ Layout
 	Buttons
 		// Training options
 			*TEMPLATE
-				on click:
-					if (no inCombat)
-						yield 1 xp
-					else
-						log Can't increase stats while in combat!
-					end
-				end
+				on click:if (inCombat) log Can't increase stats while in combat!						
 
 			  *trainButton
-			    name:Train
+			    	name:Train
 					desc:Increases Strength
-			    on click:if (no inCombat) yield 1 str
+			    	on click:if (no inCombat) yield 1 str
 
 				*drinkButton
 					name:Drink
@@ -79,89 +69,156 @@ Layout
 					on click:if (no inCombat) yield 1 con
 
 				*studyButton
-			    name:Study
+			    	name:Study
 					desc:Increases Intelligence
-			    on click:if (no inCombat) yield 1 int
+			    	on click:if (no inCombat) yield 1 int
 
 				*meditateButton
 					name:Meditate
 					desc:Increases Focus
 					on click:if (no inCombat) yield 1 focus
 
-		// Exploring
+		// Fights
 			*TEMPLATE
-				on click:if (have inCombat) log You're already in combat!
-				tag:exploreTag
+				on click:
+					if (have inCombat) 
+						log You're already in combat!
+					else
+						log You've found an enemy!
+						show tag:enemyStats
+						show tag:combatActions
+						hide tag:fight
+					end
+				end
+				tag:fight
 
-				*exploreForestButton
-					name:Explore Forest
-					desc:Find monsters in the forest
+				*fight1
+					name:First Monster
 					on click:
-						if (inCombat=0)
-							inCombat=1
-							enemyHealth=10
-							enemyAttack=10
-							xpReward=5
-							renownReward=5
-							goldReward=5
-							log Found an enemy!
-							show rabbitIcon
-							show tag:enemyStats
-							hide tag:exploreTag
-							show tag:combatActions
+						if (no inCombat)
+							yield 10 enemyHealth
+							yield 10 enemyAttack
+							yield 10 enemyGold
+							yield 10 enemyRenown
+							enemyAchievement=1
 						end
+						[include startCombat]
+					end
+
+				*fight2
+					name:Second Monster
+					hidden
+					on click:
+						if (no inCombat)
+							yield 100 enemyHealth
+							yield 100 enemyAttack
+							yield 100 enemyGold
+							yield 100 enemyRenown
+							enemyAchievement=2
+						end
+						[include startCombat]
+					end
+
+				*fight3
+					name:Final Monster
+					hidden
+					on click:
+						if (no inCombat)
+							yield 1000 enemyHealth
+							yield 1000 enemyAttack
+							yield 1000 enemyGold
+							yield 1000 enemyRenown
+							enemyAchievement=3
+						end
+						[include startCombat]
 					end
 
 		// Combat
 			*TEMPLATE
+				hidden
+				tag:combatActions
 
 				*attackButton
 					name:Attack
-					tag:combatActions
-					hidden
 					on click:
 						if (inCombat)
-							lose str enemyHealth
-							log Did [str] damage!
-							lose enemyAttack health
-							log Took [enemyAttack] damage!
-							if (health<=0)
-								log You ran out of health and fled!
-								hide rabbitIcon
-								hide tag:enemyStats
-								show tag:exploreTag
-								hide tag:combatActions
-								inCombat=0
-							else if (no enemyHealth)
-								log You have defeated the monster!
-								hide rabbitIcon
-								hide tag:enemyStats
-								yield goldReward gold
-								yield xpReward xp
-								yield renownReward renown
-								inCombat=0
-								hide tag:combatActions
-								show tag:exploreTag
-							end
+							// do damage
+							[include applyAttack]
+							// take damage
+							[include enemyTurn]
+							// check battle status
+							[include checkBattleStatus]
 						else
 							log You are not in combat!
 						end
 					end
 
-		// Icons
-			*rabbitIcon
-				tag:enemyIcon
-				name:Evil Rabbit
-				icon:https://imgur.com/7U428yg.jpg
-				hidden
+				*fleeButton
+					name:Flee
+					desc:Flee the battle!
+					on click:
+						[include endCombat]
+						log You flee combat!
+					end
 
-		// Memes
-			//*fuelButton
-				//name:Get Fuel
-				//desc:Just for you Sean
-				//on click:yield 1 fuel
+				*spellButton
+					name:Spells
+					on click:
+						show tag:spells
+						hide tag:combatActions
+					end
+
+				*itemButton
+					name:Items
+
+		// Spellcasting
+			*TEMPLATE
+			hidden
+			tag:spells
+
+				*fireball
+					name:Fireball
+					desc:Lobs a fireball at your enemies for 2*intelligence ([2*int]) damage!
+					on click:
+						lose (2*int) enemyHealth
+						lose (int/4) mana
+						log You cast Fireball for [2*int] damage!
+						[include enemyTurn]
+						[include checkBattleStatus]
+					end
+
+				*heal
+					name:Heal
+					desc:Heals self by *placeholder*
+					on click:
+						yield (2*int) health
+						lose (int/4) mana
+						log You cast Heal and regain [2*int] health!
+						[include enemyTurn]
+						[include checkBattleStatus]
+					end
+
+				*spellButtonReturn
+					name:Back
+					desc:Hide spells and return to combat actions.
+					on click:
+						show tag:combatActions
+						hide tag:spells
+					end
+		
+		// Items
+			*TEMPLATE
+			hidden
+			tag:items
+				
+			*itemButtonReturn
+					name:Back
+					desc:Hide items and return to combat actions.
+					hidden
 
 		// Other
+		*TEMPLATE
+
 			*clearLogButton
 				name:Clear Log
 				desc:Clears the text log
@@ -171,7 +228,8 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					day=360
+					toast Hid ResourceBox!
+					hide ResourceBox
 				end
 
 	Resources
@@ -179,22 +237,26 @@ Layout
 		*TEMPLATE
 			hidden
 
+			*enemyAchievement
+
 		// Player combat stats
 		*TEMPLATE
 			start with:100
 			tag:combatStats
 
-		  *health
-		    name:Health
-				on tick:if (no inCombat and this<maxHealth) yield 1 this
+			*health
+		    	name:Health
+					on tick:if (no inCombat and this<maxHealth) yield 1 this
 
 			*maxHealth
+				name:Max Health
 
 			*mana
 				name:Mana
 				on tick:if (no inCombat and this<maxMana) yield 1 this
 
 			*maxMana
+				name:Max Mana
 
 		*TEMPLATE
 			start with:1
@@ -225,10 +287,6 @@ Layout
 
 		*TEMPLATE
 
-			*xp
-				name:XP
-				desc:Your measure of experience as an adventurer
-
 			*gold
 				name:Gold
 				desc:Use this to buy things
@@ -236,32 +294,6 @@ Layout
 			*renown
 				name:Renown
 				desc:How famous you are. Start by killing monsters.
-
-		// Time
-			*dayIncrementer
-				hidden
-
-			*day
-				name:Day
-				start with:1
-				on tick:
-					if (dayIncrementer<=8)
-						yield 1 dayIncrementer
-					else
-						dayIncrementer=0
-						yield 1 day
-					end
-				end
-
-		// Hidden until obtained
-			*TEMPLATE
-				hidden when 0
-
-		// Delete before Friday
-			*TEMPLATE
-
-				//*fuel
-					//name:Fuel
 
 		// Enemy Combat Stats
 			*inCombat
@@ -277,22 +309,21 @@ Layout
 				*enemyAttack
 					name:Enemy Attack
 
-				*xpReward
-					name:XP Reward
-
-				*renownReward
+				*enemyRenown
 					name:Renown Reward
+					desc:How much renown you get for killing this enemy.
 
-				*goldReward
+				*enemyGold
 					name:Gold Reward
+					desc:How much gold you get for killing this enemy.
 
 Buildings
 	// Hirelings
 		*TEMPLATE
 			req:have renownMilestone1
 
-			*hireling1
-				name:Adventurous Commoner
+			*commonHireling
+				name:Common Hireling
 				desc:A commoner who you can pay to do adventures for you.</>At base, gives +1 gold/s and +1 renown/s.(Idk how to display current values yet)
 				cost:10 gold
 				on tick:
@@ -305,14 +336,11 @@ Buildings
 
 			*sponserBard
 				name:Sponser a Bard
-				desc:Pay a bard to spread your name far and wide.</>+2 renown/s, but -1 gold/s
+				desc:Pay a bard to spread your name far and wide.</>+2 renown/s
 				cost:10 gold
 				req:have renownMilestone1
 				on tick:
-					if (gold)
 						yield 2 renown
-						lose 1 gold
-					end
 				end
 
 	// Gold Builders
@@ -381,12 +409,6 @@ Upgrades
 		passive:increase yield of meditateButton by 1
 
 	// Building Upgrades
-		*hirelingUpgrade1
-			req:renownMilestone1
-			cost:100 gold
-			name:Adventuring Lessons
-			desc:Teach your commoners to fight! x2 yield/s on commoners
-			passive:multiply gain of hireling1 by 2
 
 	// Passive Upgrades
 	*regenUpgrade1
@@ -396,6 +418,8 @@ Upgrades
 		passive:increase yield of health by 1
 
 Achievements
+	*TEMPLATE
+
 	// str levels
 		*strMilestone1
 			name:Fledgling Fighter
@@ -432,9 +456,93 @@ Achievements
 			desc:My small wallet is full
 			req:50 gold
 
-// Items
-// These don't seem to work AT ALL
+	// Fights Complete
+		*TEMPLATE
+
+			*fight1Win
+				req:enemyAchievement=10
+				on earn:show fight2
+
+			*fight2Win
+				req:enemyAchievement=20
+				on earn:show fight3
+
+			*fight3Win
+				req:enemyAchievement=30
 
 Shinies
 
 Includes
+	*include enemyTurn
+		if (inCombat)
+			lose enemyAttack health
+			log The enemy attacks and you take [enemyAttack] damage!
+		else
+			log Error:Tried to run enemyTurn while out of combat!
+		end
+
+	*include applyAttack
+		if (inCombat)
+			lose str enemyHealth
+			log You attack and deal [str] damage!
+		else
+			log Error:Tried to applyAttack while out of combat!
+		end
+
+	*include endCombat
+		enemyAttack=0
+		enemyHealth=0
+		enemyGold=0
+		enemyRenown=0
+		inCombat=0
+		enemyAchievement=0
+		hide tag:enemyStats
+		hide tag:combatActions
+		show fight1
+		if (fight1Win) show fight2
+		if (fight2Win) show fight3
+
+	*include winBattle
+		if (enemyAchievement=1)
+			yield fight1Win
+		else if (enemyAchievement=2)
+			yield fight2Win
+		else if (enemyAchievement=3)
+			yield fight3Win
+		end
+		yield enemyGold gold
+		yield enemyRenown renown
+		log You have defeated the enemy!
+		log You gain [enemyGold] gold!
+		log You gain [enemyRenown] renown!
+		[include endCombat]
+
+	*include loseBattle
+		log Your health has been reduced to zero!
+		log You are forced to flee!
+		[include endCombat]
+
+	*include testInclude %stringParameter="Empty stringParameter" %intParameter="100"
+		log You hit the test include!
+		log The stringParameter is [%stringParameter]
+		log Going to increase days by [%intParameter]
+		yield [%intParameter] day
+
+	*include checkBattleStatus
+		if (inCombat)
+			if (enemyHealth<=0)
+				[include winBattle]
+			else if (health<=0)
+				[include loseBattle]
+			end
+		else
+			log Error:Tried to checkBattleStatus while not in combat!
+		end
+
+	*include startCombat
+		if (inCombat)
+			log Error:Tried to startCombat while already in combat!
+		else
+			inCombat=1
+			show tag:enemyStats
+		end
