@@ -240,8 +240,8 @@ Layout
 			tag:combatStats
 
 			*health
-		    	name:Health
-					on tick:if (no inCombat and this<maxHealth) yield 1 this
+		    name:Health
+				on tick:if (no inCombat and this<maxHealth) yield 1 this
 
 			*maxHealth
 				name:Max Health
@@ -397,31 +397,31 @@ Achievements
 	// str levels
 		*strMilestone1
 			name:Fledgling Fighter
-			desc:Others begin to acknowledge you as a fighter.
+			desc:You reached 25 Strength!
 			req:25 str
 
 	// con levels
 		*constMilestone1
 			name:Tavern Regular
-			desc:Your name is known in the local taverns.
+			desc:You reached 25 Constitution!
 			req:25 con
 
 	// int levels
 		*intMilestone1
 			name:Smart Commoner
-			desc:The local librarians know your name.
+			desc:You reached 25 Intelligence!
 			req:25 int
 
 	// Focus levels
 		*focusMilestone1
 			name:Sudoku Solver
-			desc:You feel more able to focus.
+			desc:You reached 25 Focus!
 			req:25 focus
 
 	// Gold levels
 		*goldMilestone1
 			name:Clinky Coins
-			desc:My small wallet is full
+			desc:You reached 50 Gold!
 			req:50 gold
 
 	// Fights Complete
@@ -429,16 +429,19 @@ Achievements
 
 			*fight1Win
 				name:Novice Adventurer
+				desc:You defeated the first monster!
 				req:enemyAchievement=10
 				on earn:show fight2
 
 			*fight2Win
 				name:Intermediate Adventurer
+				desc:You defeated the second monster!
 				req:enemyAchievement=20
 				on earn:show fight3
 
 			*fight3Win
 				name:Master Adventurer
+				desc:You defeated the final monster!
 				req:enemyAchievement=30
 
 Shinies
@@ -497,13 +500,9 @@ Includes
 
 	*include checkBattleStatus
 		if (have inCombat)
-			if (enemyHealth<=0 and health<=0)
-				[include tieBattle]
-			else if (enemyHealth<=0)
-				[include winBattle]
-			else if (health<=0)
-				[include loseBattle]
-			end
+			if (enemyHealth<=0 and health<=0) [include tieBattle]
+			else if (enemyHealth<=0) [include winBattle]
+			else if (health<=0) [include loseBattle]
 		else
 			log Error:Tried to checkBattleStatus while not in combat!
 		end
