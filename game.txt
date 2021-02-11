@@ -304,48 +304,132 @@ Buildings
 
 	// Gold Builders
 		*lemonadeStand
-			// Make a grape reference
 			name:Lemonade Stand
-			desc:Start a Lemonade Stand to bring in constant income</>+2 gold/s
+			desc:They don't have grapes.</>+2 gold/s
 			req:goldMilestone1
 			cost:10 gold
 			on tick:yield 2 gold
 
+		*oilDrill
+			name:Oil Drill
+			desc:Hire the mole people to dig up oil.</>+20 gold/s
+			req:goldMilestone2
+			cost:100 gold
+			on tick:yield 20 gold
+
+		*gmeStonks
+			name:GME Stonks
+			desc:Grow diamond hands.</>+200 gold/s
+			req:goldMilestone3
+			cost:1000 gold
+			on tick:yield 200 gold
+
 	// Trainers
-		*strTrainer
-			req:have strMilestone1
-			name:Personal Trainer
-			desc:Passively increases your Strength
-			cost:10 gold
-			on tick:yield 1 str
+		// Strength
+			*strTrainer1
+				req:have strMilestone1
+				name:Personal Trainer
+				desc:Helps you get big.</>+1 Strength/s
+				cost:10 gold
+				on tick:yield 1 str
 
-		*conTrainer
-			req:have constMilestone1
-			name:Drinking Buddy
-			desc:Passively increases your Constitution
-			cost:10 gold
-			on tick:
-				yield 1 con
-				yield 2 maxHealth
-			end
-			// might not increase max health
+			*strTrainer2
+				req:have strMilestone2
+				name:Personal Pro-Wrestler
+				desc:Helps you act big.</>+5 Strength/s
+				cost:100 gold
+				on tick:yield 5 str
 
-		*intTrainer
-			req:have intMilestone1
-			name:Magic Tutor
-			desc:Passively increases your Intelligence
-			cost:10 gold
-			on tick:yield 1 int
+			*strTrainer3
+				req:have strMilestone3
+				name:Personal Jesus
+				desc:Someone to hear your prayers, someone who cares.</>+10 Strength/s
+				cost:1000 gold
+				on tick:yield 10 str
 
-		*focusTrainer
-			req:have focusMilestone1
-			name:Yoga Instructor
-			desc:Passively increases your Focus
-			cost:10 gold
-			on tick:
-				yield 1 focus
-				yield 2 maxMana
-			end
+		// Constitution
+			*conTrainer1
+				req:have constMilestone1
+				name:Drinking Buddy
+				desc:It takes two to tango.</>+1 Constitution/s
+				cost:10 gold
+				on tick:
+					yield 1 con
+					yield 2 maxHealth
+				end
+
+			*conTrainer2
+				req:have constMilestone2
+				name:Frat Bros
+				desc:Now it's a party.</>+5 Constitution/s
+				cost:100 gold
+				on tick:
+					yield 5 con
+					yield 10 maxHealth
+				end
+
+			*conTrainer3
+				req:have constMilestone3
+				name:Second Kidney
+				desc:Nothing can stop you now.</>+10 Constitution/s
+				cost:1000 gold
+				on tick:
+					yield 10 con
+					yield 20 maxHealth
+				end
+
+		// Intelligence
+			*intTrainer1
+				req:have intMilestone1
+				name:Library Pass
+				desc:Time to hit the books.</>+1 Intelligence/s
+				cost:10 gold
+				on tick:yield 1 int
+
+			*intTrainer2
+				req:have intMilestone2
+				name:Magic Tutor
+				desc:Gives your zap a little zing.</>+5 Intelligence/s
+				cost:100 gold
+				on tick:yield 5 int
+
+			*intTrainer3
+				req:have intMilestone3
+				name:Magical Research Team
+				desc:Knowledge is power.</>+10 Intelligence/s
+				cost:1000 gold
+				on tick:yield 10 int
+
+		// Focus
+			*focusTrainer1
+				req:have focusMilestone1
+				name:Yoga Instructor
+				desc:Loosens the muscles and the mind.</>+1 Focus/s
+				cost:10 gold
+				on tick:
+					yield 1 focus
+					yield 2 maxMana
+				end
+
+			*focusTrainer2
+				req:have focusMilestone2
+				name:Spell Focus
+				desc:An object to concentrate your spells.</>+5 Focus/s
+				cost:100 gold
+				on tick:
+					yield 5 focus
+					yield 10 maxMana
+				end
+
+			*focusTrainer3
+				req:have focusMilestone3
+				name:Magic Grass
+				desc:Clears the mind.</>+10 Focus/s
+				cost:1000 gold
+				on tick:
+					yield 10 focus
+					yield 20 maxMana
+				end
 
 Upgrades
 	// Active Upgrades
@@ -481,7 +565,7 @@ Achievements
 				req:enemyAchievement=10
 				on earn:
 					show fight2
-					toast Congratulations! You are now a Novice Adventurer!
+					toast Congratulations! You are now a Novice Adventurer!</>You have unlocked the next opponent!
 				end
 
 			*fight2Win
@@ -490,7 +574,7 @@ Achievements
 				req:enemyAchievement=20
 				on earn:
 					show fight3
-					toast Congratulations! You are now an Intermediate Adventurer!
+					toast Congratulations! You are now an Intermediate Adventurer!</>You have unlocked the next opponent!
 				end
 
 			*fight3Win
