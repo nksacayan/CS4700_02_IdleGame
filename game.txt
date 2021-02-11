@@ -81,7 +81,12 @@ Layout
 				*meditateButton
 					name:Meditate
 					desc:Increases Focus
-					on click:if (no inCombat) yield 1 focus
+					on click:
+						if (no inCombat)
+							yield 1 focus
+							yield 2 maxMana
+						end
+					end
 
 		// Fights
 			*TEMPLATE
@@ -232,8 +237,7 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					toast Hid ResourceBox!
-					hide ResourceBox
+					log inCombat=[inCombat]
 				end
 
 	Resources
@@ -281,8 +285,7 @@ Layout
 			*focus
 				name:Focus
 				desc:Increases mana
-				on earn:yield 1 maxMana
-				on lose:lose 1 maxMana
+				// Fake stat
 
 			*level
 				name:Level
@@ -354,7 +357,10 @@ Buildings
 			name:Yoga Instructor
 			desc:Passively increases your Focus
 			cost:10 gold
-			on tick:yield 1 focus
+			on tick:
+				yield 1 focus
+				yield 2 maxMana
+			end
 
 Upgrades
 	// Active Upgrades
@@ -384,7 +390,10 @@ Upgrades
 		name:Scented Candles
 		desc:+1 Focus per Meditate
 		cost:10 gold
-		passive:increase yield of meditateButton by 1
+		passive:
+			increase focus yield of meditateButton by 1
+			increase maxMana yield of meditateButton by 2
+		end
 
 	// Building Upgrades
 
@@ -500,9 +509,16 @@ Includes
 		log Going to increase days by [%intParameter]
 		yield [%intParameter] day
 
+	*include tieBattle
+		log You and your opponent strike eachother down simultaneously!
+		log You are forced to flee!
+		[include endCombat]
+
 	*include checkBattleStatus
 		if (have inCombat)
-			if (enemyHealth<=0)
+			if (enemyHealth<=0 and health<=0)
+				[include tieBattle]
+			else if (enemyHealth<=0)
 				[include winBattle]
 			else if (health<=0)
 				[include loseBattle]
