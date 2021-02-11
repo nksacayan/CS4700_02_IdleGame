@@ -138,15 +138,13 @@ Layout
 				*attackButton
 					name:Attack
 					on click:
-						if (inCombat)
+						if (have inCombat)
 							// do damage
 							[include applyAttack]
 							// take damage
 							[include enemyTurn]
 							// check battle status
 							[include checkBattleStatus]
-						else
-							log You are not in combat!
 						end
 					end
 
@@ -177,22 +175,26 @@ Layout
 					name:Fireball
 					desc:Lobs a fireball at your enemies for 2*intelligence ([2*int]) damage!
 					on click:
-						lose (2*int) enemyHealth
-						lose (int/4) mana
-						log You cast Fireball for [2*int] damage!
-						[include enemyTurn]
-						[include checkBattleStatus]
+						if (have inCombat)
+							lose (2*int) enemyHealth
+							lose (int/4) mana
+							log You cast Fireball for [2*int] damage!
+							[include enemyTurn]
+							[include checkBattleStatus]
+						end
 					end
 
 				*heal
 					name:Heal
 					desc:Heals self by *placeholder*
 					on click:
-						yield (2*int) health
-						lose (int/4) mana
-						log You cast Heal and regain [2*int] health!
-						[include enemyTurn]
-						[include checkBattleStatus]
+						if (have inCombat)
+							yield (2*int) health
+							lose (int/4) mana
+							log You cast Heal and regain [2*int] health!
+							[include enemyTurn]
+							[include checkBattleStatus]
+						end
 					end
 
 				*spellButtonReturn
@@ -331,6 +333,7 @@ Buildings
 			desc:Passively increases your Constitution
 			cost:10 gold
 			on tick:yield 1 con
+			// might not increase max health
 
 		*intTrainer
 			req:have intMilestone1
@@ -405,7 +408,7 @@ Achievements
 
 	// Focus levels
 		*focusMilestone1
-			name:Sodoku Solver
+			name:Sudoku Solver
 			desc:You feel more able to focus.
 			req:25 focus
 
@@ -419,14 +422,17 @@ Achievements
 		*TEMPLATE
 
 			*fight1Win
+				name:Novice Adventurer
 				req:enemyAchievement=10
 				on earn:show fight2
 
 			*fight2Win
+				name:Intermediate Adventurer
 				req:enemyAchievement=20
 				on earn:show fight3
 
 			*fight3Win
+				name:Master Adventurer
 				req:enemyAchievement=30
 
 Shinies
@@ -485,7 +491,7 @@ Includes
 		yield [%intParameter] day
 
 	*include checkBattleStatus
-		if (inCombat)
+		if (have inCombat)
 			if (enemyHealth<=0)
 				[include winBattle]
 			else if (health<=0)
@@ -496,7 +502,7 @@ Includes
 		end
 
 	*include startCombat
-		if (inCombat)
+		if (have inCombat)
 			log Error:Tried to startCombat while already in combat!
 		else
 			inCombat=1
