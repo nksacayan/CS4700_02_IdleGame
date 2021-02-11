@@ -106,7 +106,7 @@ Layout
 					name:First Monster
 					on click:
 						if (no inCombat)
-							yield 10 enemyHealth
+							yield 100 enemyHealth
 							yield 10 enemyAttack
 							yield 10 enemyGold
 							enemyAchievement=1
@@ -119,7 +119,7 @@ Layout
 					hidden
 					on click:
 						if (no inCombat)
-							yield 100 enemyHealth
+							yield 1000 enemyHealth
 							yield 100 enemyAttack
 							yield 100 enemyGold
 							enemyAchievement=2
@@ -132,7 +132,7 @@ Layout
 					hidden
 					on click:
 						if (no inCombat)
-							yield 1000 enemyHealth
+							yield 10000 enemyHealth
 							yield 1000 enemyAttack
 							yield 1000 enemyGold
 							enemyAchievement=3
@@ -398,29 +398,79 @@ Achievements
 			desc:You reached 25 Strength!
 			req:25 str
 
+		*strMilestone2
+			name:Fervent Fighter
+			desc:You reached 250 Strength!
+			req:250 str
+
+		*strMilestone3
+			name:Furious Fighter
+			desc:You reached 2500 Strength!
+			req:2500 str
+
 	// con levels
 		*constMilestone1
 			name:Tavern Regular
 			desc:You reached 25 Constitution!
 			req:25 con
 
+		*constMilestone2
+			name:Beer Belly
+			desc:You reached 250 Constitution!
+			req:250 con
+
+		*constMilestone3
+			name:Goblet Goliath
+			desc:You reached 2500 Constitution!
+			req:2500 con
+
 	// int levels
 		*intMilestone1
-			name:Smart Commoner
+			name:Smarty Pants
 			desc:You reached 25 Intelligence!
 			req:25 int
 
+		*intMilestone2
+			name:Puzzle Puncher
+			desc:You reached 250 Intelligence!
+			req:250 int
+
+		*intMilestone3
+			name:Ti-84
+			desc:You reached 2500 Intelligence!
+			req:2500 int
+
 	// Focus levels
 		*focusMilestone1
-			name:Sudoku Solver
+			name:Mindful
 			desc:You reached 25 Focus!
 			req:25 focus
+
+		*focusMilestone2
+			name:Enlightened
+			desc:You reached 250 Focus!
+			req:250 focus
+
+		*focusMilestone3
+			name:Mini Buddha
+			desc:You reached 2500 Focus!
+			req:2500 focus
 
 	// Gold levels
 		*goldMilestone1
 			name:Clinky Coins
 			desc:You reached 50 Gold!
 			req:50 gold
+
+		*goldMilestone2
+			name:Money Bags
+			desc:You reached 500 Gold!
+			req:500 gold
+
+		*goldMilestone3
+			name:AdVenture Capitalist
+			desc:You reached 5000 Gold!
+			req:5000 gold
 
 	// Fights Complete
 		*TEMPLATE
