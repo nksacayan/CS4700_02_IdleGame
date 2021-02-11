@@ -370,8 +370,8 @@ Buildings
 
 			*conTrainer3
 				req:have constMilestone3
-				name:Second Kidney
-				desc:Nothing can stop you now.</>+10 Constitution/s
+				name:The Guzzler
+				desc:It's the hat with staws and cupholders.</>+10 Constitution/s
 				cost:1000 gold
 				on tick:
 					yield 10 con
@@ -433,45 +433,154 @@ Buildings
 
 Upgrades
 	// Active Upgrades
-	*trainingUpgrade1
-		name:Practice Sword
-		desc:+1 Strength per Train
-		cost:10 gold
-		passive:increase yield of trainButton by 1
+		// Strength
+			*trainingUpgrade1
+				name:Practice Sword
+				desc:A wooden sword used for practice</>+1 Strength per Train
+				req:strMilestone1
+				cost:10 gold
+				passive:increase yield of trainButton by 1
 
-	// Add kidney meme somewhere
-	*drinkingUpgrade1
-		name:Bigger Mug
-		desc:+1 Constitution per Drink
-		cost:10 gold
-		passive:
-			increase con yield of drinkButton by 1
-			increase maxHealth yield of drinkButton by 2
-		end
+			*trainingUpgrade2
+				name:Weighted Training Vest
+				desc:A Turtle School Uniform. It's very heavy.</>+5 Strength per Train
+				req:strMilestone2
+				cost:100 gold
+				passive:increase yield of trainButton by 5
 
-	*studyingUpgrade1
-		name:Set of Bookmarks
-		desc:+1 Intelligence per Study
-		cost:10 gold
-		passive:increase yield of studyButton by 1
+			*trainingUpgrade3
+				name:Montage Music
+				req:strMilestone3
+				desc:Without his montage, Rocky is nothing.</>+10 Strength per Train
+				cost:1000 gold
+				passive:increase yield of trainButton by 10
 
-	*meditateUpgrade1
-		name:Scented Candles
-		desc:+1 Focus per Meditate
-		cost:10 gold
-		passive:
-			increase focus yield of meditateButton by 1
-			increase maxMana yield of meditateButton by 2
-		end
+		// Constitution
+			*drinkingUpgrade1
+				name:Bigger Mug
+				desc:It fits more.</>+1 Constitution per Drink
+				cost:10 gold
+				req:constMilestone1
+				passive:
+					increase con yield of drinkButton by 1
+					increase maxHealth yield of drinkButton by 2
+				end
 
-	// Building Upgrades
+			*drinkingUpgrade2
+				name:Toothpick Umbrellas
+				req:constMilestone2
+				desc:Its fancy now.</>+5 Constitution per Drink
+				cost:100 gold
+				passive:
+					increase con yield of drinkButton by 5
+					increase maxHealth yield of drinkButton by 10
+				end
+
+			*drinkingUpgrade3
+				name:Second Kidney
+				req:constMilestone3
+				desc:Nothing can stop you now.</>+10 Constitution per Drink
+				cost:1000 gold
+				passive:
+					increase con yield of drinkButton by 10
+					increase maxHealth yield of drinkButton by 20
+				end
+
+		// Intelligence
+			*studyingUpgrade1
+				name:Set of Bookmarks
+				desc:Helps keep your place!</>+1 Intelligence per Study
+				req:intMilestone1
+				cost:10 gold
+				passive:increase yield of studyButton by 1
+
+			*studyingUpgrade2
+				name:Thinking Cap
+				desc:Put on your thinking cap!</>+5 Intelligence per Study
+				req:intMilestone2
+				cost:100 gold
+				passive:increase yield of studyButton by 5
+
+			*studyingUpgrade3
+				name:Lofi Hip Hop
+				desc:Chill beats to study to.</>+10 Intelligence per Study
+				req:intMilestone3
+				cost:1000 gold
+				passive:increase yield of studyButton by 10
+
+		// Focus
+			*meditateUpgrade1
+				name:Scented Candles
+				desc:They smell nice.</>+1 Focus per Meditate
+				cost:10 gold
+				req:focusMilestone1
+				passive:
+					increase focus yield of meditateButton by 1
+					increase maxMana yield of meditateButton by 2
+				end
+
+			*meditateUpgrade2
+				name:Cool Gong
+				desc:GOOOOOOOONGGGGGG</>+5 Focus per Meditate
+				cost:100 gold
+				req:focusMilestone2
+				passive:
+					increase focus yield of meditateButton by 5
+					increase maxMana yield of meditateButton by 10
+				end
+
+			*meditateUpgrade3
+				name:Zen Garden
+				desc:Very peaceful.</>+10 Focus per Meditate
+				cost:1000 gold
+				req:focusMilestone1
+				passive:
+					increase focus yield of meditateButton by 10
+					increase maxMana yield of meditateButton by 20
+				end
 
 	// Passive Upgrades
-	*regenUpgrade1
-		name:First Aid Kit
-		desc:+1 passive Health Regen
-		cost:10 gold
-		passive:increase yield of health by 1
+		// Health
+			*regenUpgrade1
+				name:Rags
+				desc:At least you can wrap your wounds.</>+1 passive Health Regen
+				cost:10 gold
+				passive:increase yield of health by 1
+
+			*regenUpgrade2
+				name:Healer's Kit
+				desc:Only once per short rest(just kidding).</>+10 passive Health Regen
+				cost:100 gold
+				req:fight1Win
+				passive:increase yield of health by 10
+
+			*regenUpgrade3
+				name:Magical Gummi Vitamins
+				desc:They're delicious.</>+1 passive Health Regen
+				cost:1000 gold
+				req:fight2Win
+				passive:increase yield of health by 100
+
+		// Mana
+			*manaRegen1
+				name:Jeweled Necklace
+				desc:I feel my magic coming back, somehow.</>+1 passive Mana Regen
+				cost:10 gold
+				passive:increase yield of mana by 1
+
+			*manaRegen2
+				name:Enchanted Hat
+				desc:My head is glowing.</>+10 passive Mana Regen
+				req:fight1Win
+				cost:100 gold
+				passive:increase yield of mana by 10
+			
+			*manaRegen3
+				name:Shiny Rock
+				desc:Its REALLY shiny.</>+100 passive Mana Regen
+				req:fight2Win
+				cost:1000 gold
+				passive:increase yield of mana by 100
 
 Achievements
 	*TEMPLATE
