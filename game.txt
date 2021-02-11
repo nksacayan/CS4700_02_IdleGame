@@ -66,7 +66,12 @@ Layout
 				*drinkButton
 					name:Drink
 					desc:Increases Constitution
-					on click:if (no inCombat) yield 1 con
+					on click:
+						if (no inCombat)
+							yield 1 con
+							yield 2 maxHealth
+						end
+					end
 
 				*studyButton
 			    	name:Study
@@ -267,8 +272,7 @@ Layout
 			*con
 				name:Constitution
 				desc:Increases health
-				on earn:yield 1 maxHealth
-				on lose:lose 1 maxHealth
+				// Fake stat because engine can't tick properly
 
 			*int
 				name:Intelligence
@@ -332,7 +336,10 @@ Buildings
 			name:Drinking Buddy
 			desc:Passively increases your Constitution
 			cost:10 gold
-			on tick:yield 1 con
+			on tick:
+				yield 1 con
+				yield 2 maxHealth
+			end
 			// might not increase max health
 
 		*intTrainer
@@ -362,7 +369,10 @@ Upgrades
 		name:Bigger Mug
 		desc:+1 Constitution per Drink
 		cost:10 gold
-		passive:increase yield of drinkButton by 1
+		passive:
+			increase con yield of drinkButton by 1
+			increase maxHealth yield of drinkButton by 2
+		end
 
 	*studyingUpgrade1
 		name:Set of Bookmarks
