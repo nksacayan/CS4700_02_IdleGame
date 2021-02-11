@@ -464,6 +464,9 @@ Includes
 		end
 
 	*include endCombat
+		show fight1
+		if (fight1Win) show fight2
+		if (fight2Win) show fight3
 		enemyAttack=0
 		enemyHealth=0
 		enemyGold=0
@@ -471,9 +474,7 @@ Includes
 		enemyAchievement=0
 		hide tag:enemyStats
 		hide tag:combatActions
-		show fight1
-		if (fight1Win) show fight2
-		if (fight2Win) show fight3
+		hide tag:spells
 
 	*include winBattle
 		if (enemyAchievement=1)
@@ -499,12 +500,12 @@ Includes
 		[include endCombat]
 
 	*include checkBattleStatus
-		if (have inCombat)
-			if (enemyHealth<=0 and health<=0) [include tieBattle]
-			else if (enemyHealth<=0) [include winBattle]
-			else if (health<=0) [include loseBattle]
-		else
-			log Error:Tried to checkBattleStatus while not in combat!
+		if (enemyHealth<=0) 
+			[include winBattle]
+			[include endCombat]
+		else if (health<=0) 
+			[include loseBattle]
+			[include endCombat]
 		end
 
 	*include startCombat
