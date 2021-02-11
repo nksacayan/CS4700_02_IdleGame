@@ -227,6 +227,14 @@ Layout
 					log inCombat=[inCombat]
 				end
 
+			*retireButton
+				name:Retire
+				hidden
+				desc:Reset your current stats and start over with upscaled enemies and new game bonuses.
+				req:fight3Win
+				on click:
+				end
+
 	Resources
 		// Makeshift global variables
 		*TEMPLATE
@@ -246,6 +254,7 @@ Layout
 
 			*maxHealth
 				name:Max Health
+				is always:(con*2 + 98)
 
 			*mana
 				name:Mana
@@ -254,6 +263,7 @@ Layout
 
 			*maxMana
 				name:Max Mana
+				is always:(focus*2 + 98)
 
 		*TEMPLATE
 			start with:1
@@ -302,28 +312,6 @@ Layout
 
 Buildings
 
-	// Gold Builders
-		*lemonadeStand
-			name:Lemonade Stand
-			desc:They don't have grapes.</>+2 gold/s
-			req:goldMilestone1
-			cost:10 gold
-			on tick:yield 2 gold
-
-		*oilDrill
-			name:Oil Drill
-			desc:Hire the mole people to dig up oil.</>+20 gold/s
-			req:goldMilestone2
-			cost:100 gold
-			on tick:yield 20 gold
-
-		*gmeStonks
-			name:GME Stonks
-			desc:Grow diamond hands.</>+200 gold/s
-			req:goldMilestone3
-			cost:1000 gold
-			on tick:yield 200 gold
-
 	// Trainers
 		// Strength
 			*strTrainer1
@@ -355,7 +343,7 @@ Buildings
 				cost:10 gold
 				on tick:
 					yield 1 con
-					yield 2 maxHealth
+					//yield 2 maxHealth
 				end
 
 			*conTrainer2
@@ -365,7 +353,7 @@ Buildings
 				cost:100 gold
 				on tick:
 					yield 5 con
-					yield 10 maxHealth
+					//yield 10 maxHealth
 				end
 
 			*conTrainer3
@@ -375,7 +363,7 @@ Buildings
 				cost:1000 gold
 				on tick:
 					yield 10 con
-					yield 20 maxHealth
+					//yield 20 maxHealth
 				end
 
 		// Intelligence
@@ -408,7 +396,7 @@ Buildings
 				cost:10 gold
 				on tick:
 					yield 1 focus
-					yield 2 maxMana
+					//yield 2 maxMana
 				end
 
 			*focusTrainer2
@@ -418,7 +406,7 @@ Buildings
 				cost:100 gold
 				on tick:
 					yield 5 focus
-					yield 10 maxMana
+					//yield 10 maxMana
 				end
 
 			*focusTrainer3
@@ -428,8 +416,30 @@ Buildings
 				cost:1000 gold
 				on tick:
 					yield 10 focus
-					yield 20 maxMana
+					//yield 20 maxMana
 				end
+
+		// Gold Builders
+			*lemonadeStand
+				name:Lemonade Stand
+				desc:They don't have grapes.</>+2 gold/s
+				req:goldMilestone1
+				cost:10 gold
+				on tick:yield 2 gold
+
+			*oilDrill
+				name:Oil Drill
+				desc:Hire the mole people to dig up oil.</>+20 gold/s
+				req:goldMilestone2
+				cost:100 gold
+				on tick:yield 20 gold
+
+			*gmeStonks
+				name:GME Stonks
+				desc:Grow diamond hands.</>+200 gold/s
+				req:goldMilestone3
+				cost:1000 gold
+				on tick:yield 200 gold
 
 Upgrades
 	// Active Upgrades
@@ -463,7 +473,7 @@ Upgrades
 				req:constMilestone1
 				passive:
 					increase con yield of drinkButton by 1
-					increase maxHealth yield of drinkButton by 2
+					//increase maxHealth yield of drinkButton by 2
 				end
 
 			*drinkingUpgrade2
@@ -473,7 +483,7 @@ Upgrades
 				cost:100 gold
 				passive:
 					increase con yield of drinkButton by 5
-					increase maxHealth yield of drinkButton by 10
+					//increase maxHealth yield of drinkButton by 10
 				end
 
 			*drinkingUpgrade3
@@ -483,7 +493,7 @@ Upgrades
 				cost:1000 gold
 				passive:
 					increase con yield of drinkButton by 10
-					increase maxHealth yield of drinkButton by 20
+					//increase maxHealth yield of drinkButton by 20
 				end
 
 		// Intelligence
@@ -516,7 +526,7 @@ Upgrades
 				req:focusMilestone1
 				passive:
 					increase focus yield of meditateButton by 1
-					increase maxMana yield of meditateButton by 2
+					//increase maxMana yield of meditateButton by 2
 				end
 
 			*meditateUpgrade2
@@ -526,7 +536,7 @@ Upgrades
 				req:focusMilestone2
 				passive:
 					increase focus yield of meditateButton by 5
-					increase maxMana yield of meditateButton by 10
+					//increase maxMana yield of meditateButton by 10
 				end
 
 			*meditateUpgrade3
@@ -536,7 +546,7 @@ Upgrades
 				req:focusMilestone1
 				passive:
 					increase focus yield of meditateButton by 10
-					increase maxMana yield of meditateButton by 20
+					//increase maxMana yield of meditateButton by 20
 				end
 
 	// Passive Upgrades
@@ -556,7 +566,7 @@ Upgrades
 
 			*regenUpgrade3
 				name:Magical Gummi Vitamins
-				desc:They're delicious.</>+1 passive Health Regen
+				desc:They're delicious.</>+100 passive Health Regen
 				cost:1000 gold
 				req:fight2Win
 				passive:increase yield of health by 100
