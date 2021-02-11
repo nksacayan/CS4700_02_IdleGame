@@ -56,7 +56,7 @@ Layout
 	Buttons
 		// Training options
 			*TEMPLATE
-				on click:if (inCombat) log Can't increase stats while in combat!						
+				on click:if (inCombat) log Can't increase stats while in combat!
 
 			  *trainButton
 			    	name:Train
@@ -81,7 +81,7 @@ Layout
 		// Fights
 			*TEMPLATE
 				on click:
-					if (have inCombat) 
+					if (have inCombat)
 						log You're already in combat!
 					else
 						log You've found an enemy!
@@ -99,7 +99,6 @@ Layout
 							yield 10 enemyHealth
 							yield 10 enemyAttack
 							yield 10 enemyGold
-							yield 10 enemyRenown
 							enemyAchievement=1
 						end
 						[include startCombat]
@@ -113,7 +112,6 @@ Layout
 							yield 100 enemyHealth
 							yield 100 enemyAttack
 							yield 100 enemyGold
-							yield 100 enemyRenown
 							enemyAchievement=2
 						end
 						[include startCombat]
@@ -127,7 +125,6 @@ Layout
 							yield 1000 enemyHealth
 							yield 1000 enemyAttack
 							yield 1000 enemyGold
-							yield 1000 enemyRenown
 							enemyAchievement=3
 						end
 						[include startCombat]
@@ -205,12 +202,12 @@ Layout
 						show tag:combatActions
 						hide tag:spells
 					end
-		
+
 		// Items
 			*TEMPLATE
 			hidden
 			tag:items
-				
+
 			*itemButtonReturn
 					name:Back
 					desc:Hide items and return to combat actions.
@@ -291,10 +288,6 @@ Layout
 				name:Gold
 				desc:Use this to buy things
 
-			*renown
-				name:Renown
-				desc:How famous you are. Start by killing monsters.
-
 		// Enemy Combat Stats
 			*inCombat
 				hidden
@@ -309,39 +302,11 @@ Layout
 				*enemyAttack
 					name:Enemy Attack
 
-				*enemyRenown
-					name:Renown Reward
-					desc:How much renown you get for killing this enemy.
-
 				*enemyGold
 					name:Gold Reward
 					desc:How much gold you get for killing this enemy.
 
 Buildings
-	// Hirelings
-		*TEMPLATE
-			req:have renownMilestone1
-
-			*commonHireling
-				name:Common Hireling
-				desc:A commoner who you can pay to do adventures for you.</>At base, gives +1 gold/s and +1 renown/s.(Idk how to display current values yet)
-				cost:10 gold
-				on tick:
-					yield 1 gold
-					yield 1 renown
-				end
-
-	// Renown Builders
-		*TEMPLATE
-
-			*sponserBard
-				name:Sponser a Bard
-				desc:Pay a bard to spread your name far and wide.</>+2 renown/s
-				cost:10 gold
-				req:have renownMilestone1
-				on tick:
-						yield 2 renown
-				end
 
 	// Gold Builders
 		*lemonadeStand
@@ -444,12 +409,6 @@ Achievements
 			desc:You feel more able to focus.
 			req:25 focus
 
-	// Renown levels
-		*renownMilestone1
-			name:Village hero
-			desc:You are known throughout your small hamlet
-			req:25 renown
-
 	// Gold levels
 		*goldMilestone1
 			name:Clinky Coins
@@ -493,7 +452,6 @@ Includes
 		enemyAttack=0
 		enemyHealth=0
 		enemyGold=0
-		enemyRenown=0
 		inCombat=0
 		enemyAchievement=0
 		hide tag:enemyStats
@@ -511,10 +469,8 @@ Includes
 			yield fight3Win
 		end
 		yield enemyGold gold
-		yield enemyRenown renown
 		log You have defeated the enemy!
 		log You gain [enemyGold] gold!
-		log You gain [enemyRenown] renown!
 		[include endCombat]
 
 	*include loseBattle
