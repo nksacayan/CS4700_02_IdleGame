@@ -173,9 +173,6 @@ Layout
 						hide tag:combatActions
 					end
 
-				*itemButton
-					name:Items
-
 		// Spellcasting
 			*TEMPLATE
 			hidden
@@ -214,16 +211,6 @@ Layout
 						show tag:combatActions
 						hide tag:spells
 					end
-
-		// Items
-			*TEMPLATE
-			hidden
-			tag:items
-
-			*itemButtonReturn
-					name:Back
-					desc:Hide items and return to combat actions.
-					hidden
 
 		// Other
 		*TEMPLATE
@@ -502,12 +489,6 @@ Includes
 		log Your health has been reduced to zero!
 		log You are forced to flee!
 		[include endCombat]
-
-	*include testInclude %stringParameter="Empty stringParameter" %intParameter="100"
-		log You hit the test include!
-		log The stringParameter is [%stringParameter]
-		log Going to increase days by [%intParameter]
-		yield [%intParameter] day
 
 	*include tieBattle
 		log You and your opponent strike eachother down simultaneously!
