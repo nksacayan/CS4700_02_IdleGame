@@ -242,6 +242,7 @@ Layout
 			*health
 		    name:Health
 				on tick:if (no inCombat and this<maxHealth) yield 1 this
+				desc:Decreases when you take damage. You flee when this hits 0.
 
 			*maxHealth
 				name:Max Health
@@ -249,6 +250,7 @@ Layout
 			*mana
 				name:Mana
 				on tick:if (no inCombat and this<maxMana) yield 1 this
+				desc:This resource is used to cast spells.
 
 			*maxMana
 				name:Max Mana
@@ -267,16 +269,12 @@ Layout
 
 			*int
 				name:Intelligence
-				desc:Increases the power of magic (to be added)
+				desc:Increases the power of magic
 
 			*focus
 				name:Focus
 				desc:Increases mana
 				// Fake stat
-
-			*level
-				name:Level
-				desc:Placeholder
 
 		*TEMPLATE
 
@@ -431,18 +429,27 @@ Achievements
 				name:Novice Adventurer
 				desc:You defeated the first monster!
 				req:enemyAchievement=10
-				on earn:show fight2
+				on earn:
+					show fight2
+					toast Congratulations! You are now a Novice Adventurer!
+				end
 
 			*fight2Win
 				name:Intermediate Adventurer
 				desc:You defeated the second monster!
 				req:enemyAchievement=20
-				on earn:show fight3
+				on earn:
+					show fight3
+					toast Congratulations! You are now an Intermediate Adventurer!
+				end
 
 			*fight3Win
 				name:Master Adventurer
 				desc:You defeated the final monster!
 				req:enemyAchievement=30
+				on earn:
+					toast Congratulations! You are now a Master Adventurer!
+				end
 
 Shinies
 
