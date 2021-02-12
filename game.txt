@@ -467,12 +467,20 @@ Layout
 		// Enemy Icons
 			*TEMPLATE
 				tag:enemyIcon
+				no text
+				icon class:myIcon
 
 				*icon1
+					name:Slime
+					icon:https://imgur.com/CEYXsel.jpg
 
 				*icon2
+					name:Cruel Cumber
+					icon:https://imgur.com/74mOcvY.jpg
 
 				*icon3
+					name:Golem
+					icon:https://imgur.com/84kMCzh.jpg
 
 Buildings
 
