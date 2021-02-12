@@ -36,10 +36,6 @@ Layout
 		contains:Buildings
 		header:Buildings
 
-	*UpgradeBox
-		contains:Upgrades
-		header:Upgrades
-
 	*AchievementBox
 		contains:Achievements
 		header:Achievements
@@ -88,6 +84,35 @@ Layout
 						end
 					end
 
+				*retireButton
+					name:Retire
+					desc:Reset your current stats and start over with upscaled enemies and new game bonuses.
+					req:fight3Win
+					hidden
+					on click:
+						if (no inCombat)
+						toast Have a happy retirement!
+						log Your current adventurer retires and a new one takes his place.
+						str=1
+						con=1
+						int=1
+						focus=1
+						gold=0
+						lose :Buildings
+						lose :Achievements
+						hide fight2
+						hide fight3
+						maxHealth=100
+						health=100
+						maxMana=100
+						mana=100
+						yield 1 mentors
+						hide retireButton
+					else
+						log Can't retire while in combat!
+					end
+					end
+
 		// Fights
 			*TEMPLATE
 				on click:
@@ -107,8 +132,11 @@ Layout
 					on click:
 						if (no inCombat)
 							yield 100 enemyHealth
+							yield (enemyHealth*mentors) enemyHealth
 							yield 10 enemyAttack
+							yield (enemyAttack*mentors) enemyAttack
 							yield 10 enemyGold
+							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=1
 						end
 						[include startCombat]
@@ -120,8 +148,11 @@ Layout
 					on click:
 						if (no inCombat)
 							yield 1000 enemyHealth
+							yield (enemyHealth*mentors) enemyHealth
 							yield 100 enemyAttack
+							yield (enemyAttack*mentors) enemyAttack
 							yield 100 enemyGold
+							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=2
 						end
 						[include startCombat]
@@ -133,8 +164,11 @@ Layout
 					on click:
 						if (no inCombat)
 							yield 10000 enemyHealth
+							yield (enemyHealth*mentors) enemyHealth
 							yield 1000 enemyAttack
+							yield (enemyAttack*mentors) enemyAttack
 							yield 1000 enemyGold
+							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=3
 						end
 						[include startCombat]
@@ -224,15 +258,27 @@ Layout
 				name:Debug Button
 				desc:Does whatever I need to debug. Remove before actual game.
 				on click:
-					log inCombat=[inCombat]
-				end
-
-			*retireButton
-				name:Retire
-				hidden
-				desc:Reset your current stats and start over with upscaled enemies and new game bonuses.
-				req:fight3Win
-				on click:
+					log Testing retire
+					if (no inCombat)
+						toast Have a happy retirement!
+						log Your current adventurer retires and a new one takes his place.
+						str=1
+						con=1
+						int=1
+						focus=1
+						gold=0
+						lose :Buildings
+						lose :Achievements
+						hide fight2
+						hide fight3
+						maxHealth=100
+						health=100
+						maxMana=100
+						mana=100
+						yield 1 mentors
+					else
+						log Can't retire while in combat!
+					end
 				end
 
 	Resources
@@ -267,6 +313,7 @@ Layout
 
 		*TEMPLATE
 			start with:1
+			tag:playerStats
 
 			*str
 				name:Strength
@@ -275,7 +322,6 @@ Layout
 			*con
 				name:Constitution
 				desc:Increases health
-				// Fake stat because engine can't tick properly
 
 			*int
 				name:Intelligence
@@ -284,13 +330,24 @@ Layout
 			*focus
 				name:Focus
 				desc:Increases mana
-				// Fake stat
 
 		*TEMPLATE
 
 			*gold
 				name:Gold
 				desc:Use this to buy things
+
+			*mentors
+				name:Mentors
+				desc:Those who have retired from adventuring help the next generation.</>+10/s to all stats per Mentor.
+				hidden when 0
+				on tick:
+					yield (10*mentors) str
+					yield (10*mentors) con
+					yield (10*mentors) int
+					yield (10*mentors) focus
+					yield (10*mentors) gold
+				end
 
 		// Enemy Combat Stats
 			*inCombat
@@ -341,30 +398,21 @@ Buildings
 				name:Drinking Buddy
 				desc:It takes two to tango.</>+1 Constitution/s
 				cost:10 gold
-				on tick:
-					yield 1 con
-					//yield 2 maxHealth
-				end
+				on tick:yield 1 con
 
 			*conTrainer2
 				req:have constMilestone2
 				name:Frat Bros
 				desc:Now it's a party.</>+5 Constitution/s
 				cost:100 gold
-				on tick:
-					yield 5 con
-					//yield 10 maxHealth
-				end
+				on tick:yield 5 con
 
 			*conTrainer3
 				req:have constMilestone3
 				name:The Guzzler
 				desc:It's the hat with staws and cupholders.</>+10 Constitution/s
 				cost:1000 gold
-				on tick:
-					yield 10 con
-					//yield 20 maxHealth
-				end
+				on tick:yield 10 con
 
 		// Intelligence
 			*intTrainer1
@@ -441,7 +489,6 @@ Buildings
 				cost:1000 gold
 				on tick:yield 200 gold
 
-Upgrades
 	// Active Upgrades
 		// Strength
 			*trainingUpgrade1
@@ -543,7 +590,7 @@ Upgrades
 				name:Zen Garden
 				desc:Very peaceful.</>+10 Focus per Meditate
 				cost:1000 gold
-				req:focusMilestone1
+				req:focusMilestone3
 				passive:
 					increase focus yield of meditateButton by 10
 					//increase maxMana yield of meditateButton by 20
@@ -555,42 +602,31 @@ Upgrades
 				name:Rags
 				desc:At least you can wrap your wounds.</>+1 passive Health Regen
 				cost:10 gold
+				req:fight1Win
 				passive:increase yield of health by 1
 
 			*regenUpgrade2
 				name:Healer's Kit
 				desc:Only once per short rest(just kidding).</>+10 passive Health Regen
 				cost:100 gold
-				req:fight1Win
-				passive:increase yield of health by 10
-
-			*regenUpgrade3
-				name:Magical Gummi Vitamins
-				desc:They're delicious.</>+100 passive Health Regen
-				cost:1000 gold
 				req:fight2Win
-				passive:increase yield of health by 100
+				passive:increase yield of health by 10
 
 		// Mana
 			*manaRegen1
 				name:Jeweled Necklace
 				desc:I feel my magic coming back, somehow.</>+1 passive Mana Regen
+				req:fight1Win
 				cost:10 gold
 				passive:increase yield of mana by 1
 
 			*manaRegen2
 				name:Enchanted Hat
 				desc:My head is glowing.</>+10 passive Mana Regen
-				req:fight1Win
+				req:fight2Win
 				cost:100 gold
 				passive:increase yield of mana by 10
-			
-			*manaRegen3
-				name:Shiny Rock
-				desc:Its REALLY shiny.</>+100 passive Mana Regen
-				req:fight2Win
-				cost:1000 gold
-				passive:increase yield of mana by 100
+		
 
 Achievements
 	*TEMPLATE
@@ -662,8 +698,8 @@ Achievements
 	// Gold levels
 		*goldMilestone1
 			name:Clinky Coins
-			desc:You reached 50 Gold!
-			req:50 gold
+			desc:You reached 10 Gold!
+			req:10 gold
 
 		*goldMilestone2
 			name:Money Bags
@@ -702,9 +738,9 @@ Achievements
 				req:enemyAchievement=30
 				on earn:
 					toast Congratulations! You are now a Master Adventurer!
+					toast Retirement is now available.
+					show retireButton
 				end
-
-Shinies
 
 Includes
 	*include enemyTurn
