@@ -10,12 +10,45 @@ Settings
 	no bulk particles
 
 CSS
+
 	#content {
-  		border: 5px solid red;
+		grid-template-rows: auto auto auto auto auto;
+		border: 5px solid red;
+		display: grid;
+		/* grid-gap: 0px; */
+		grid-template-columns: auto auto;
+	}
+
+	#box-ResourceBox {
+		grid-column: 1/3;
+		grid-row: 1;
+	}
+
+	#box-ButtonBox {
+		grid-row: 2;
+	}
+
+	.box {
+		border:thin solid white
+	}
+
+	#box-BuildingBox {
+		grid-row: 3;
+	}
+
+	#box-CombatBox {
+		grid-row: 2/4;
 	}
 
 	#box-LogBox {
-		max-height:150px;
+		max-height: 150px;
+		grid-row: 4;
+		grid-column: 1/3;
+	}
+
+	#box-AchievementBox {
+		grid-row: 5;
+		grid-column: 1/3;
 	}
 
 	#log {
@@ -29,21 +62,6 @@ CSS
 	#box-things-Buildings {
 		overflow: auto;
 		max-height: 200px;
-	}
-
-	#box-ButtonBox {
-		// width: 50%;
-		/* float: left; */
-	}
-
-	#box-BuildingBox {
-		// width: 50%;
-		/* float: left; */
-	}
-
-	#box-CombatBox {
-		// width: 50%;
-		/* float: right; */
 	}
 
 	.box-header {
