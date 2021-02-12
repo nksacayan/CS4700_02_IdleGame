@@ -89,6 +89,11 @@ CSS
 		font-size: 14px;
 	}
 
+	.myIcon {
+		height:144px;
+		width:144px;
+	}
+
 Layout
 	*ResourceBox
 		contains:Resources
@@ -210,6 +215,7 @@ Layout
 							yield 10 enemyGold
 							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=1
+							show icon1
 						end
 						[include startCombat]
 					end
@@ -226,6 +232,7 @@ Layout
 							yield 100 enemyGold
 							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=2
+							show icon2
 						end
 						[include startCombat]
 					end
@@ -242,6 +249,7 @@ Layout
 							yield 1000 enemyGold
 							yield (enemyGold*mentors) enemyGold
 							enemyAchievement=3
+							show icon3
 						end
 						[include startCombat]
 					end
@@ -469,18 +477,19 @@ Layout
 				tag:enemyIcon
 				no text
 				icon class:myIcon
+				hidden
 
 				*icon1
 					name:Slime
-					icon:https://imgur.com/CEYXsel.jpg
+					icon:https://imgur.com/9trKFff.jpg
 
 				*icon2
 					name:Cruel Cumber
-					icon:https://imgur.com/74mOcvY.jpg
+					icon:https://imgur.com/utTxCJ1.jpg
 
 				*icon3
 					name:Golem
-					icon:https://imgur.com/84kMCzh.jpg
+					icon:https://imgur.com/Gsqr4cD.jpg
 
 Buildings
 
@@ -887,6 +896,7 @@ Includes
 		hide tag:enemyStats
 		hide tag:combatActions
 		hide tag:spells
+		hide tag:enemyIcon
 
 	*include winBattle
 		if (enemyAchievement=1)
