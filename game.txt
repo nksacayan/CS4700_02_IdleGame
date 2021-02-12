@@ -13,10 +13,16 @@ CSS
 
 	#content {
 		grid-template-rows: auto auto auto auto auto;
-		border: 5px solid red;
 		display: grid;
-		/* grid-gap: 0px; */
 		grid-template-columns: auto auto;
+		font-size: 1.1em;
+		grid-gap:1px;
+	}
+
+	.thing.res {
+		background: transparent;
+   		box-shadow: none;
+		margin:0px;
 	}
 
 	#box-ResourceBox {
@@ -29,7 +35,7 @@ CSS
 	}
 
 	.box {
-		border:thin solid white
+		// border:thin solid white
 	}
 
 	#box-BuildingBox {
@@ -41,7 +47,7 @@ CSS
 	}
 
 	#box-LogBox {
-		max-height: 150px;
+		height: 150px;
 		grid-row: 4;
 		grid-column: 1/3;
 	}
@@ -49,10 +55,11 @@ CSS
 	#box-AchievementBox {
 		grid-row: 5;
 		grid-column: 1/3;
+		overflow: auto;
 	}
 
 	#log {
-    	height:100px;
+    	// height:100px;
 	}
 
 	.box-bit{
@@ -68,6 +75,11 @@ CSS
 		border-bottom-left-radius: 0px;
 		border-bottom-right-radius: 0px;
 		margin-bottom: 0px;
+		font-size:1.2em;
+	}
+
+	.box-footer {
+		margin-top:0px;
 	}
 
 	.building {
@@ -89,6 +101,7 @@ Layout
 	*BuildingBox
 		contains:Buildings
 		header:Purchasables
+		tooltip origin:left
 
 	*CombatBox
 		header:The Wilderness
