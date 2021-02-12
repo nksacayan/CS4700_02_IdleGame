@@ -105,7 +105,7 @@ Layout
 
 	*CombatBox
 		header:The Wilderness
-		contains:tag:combatStats, tag:fight, tag:combatActions, tag:spells, tag:items, tag:enemyStats
+		contains:tag:combatStats, tag:fight, tag:combatActions, tag:spells, tag:enemyIcon, tag:enemyStats
 		ps:hide
 
 	*LogBox
@@ -463,6 +463,16 @@ Layout
 				*enemyGold
 					name:Gold Reward
 					desc:How much gold you get for killing this enemy.
+
+		// Enemy Icons
+			*TEMPLATE
+				tag:enemyIcon
+
+				*icon1
+
+				*icon2
+
+				*icon3
 
 Buildings
 
