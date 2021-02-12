@@ -13,6 +13,7 @@ CSS
 		border: thin solid white;
 		overflow: hidden;
 		position: static;
+		text-align:center;
 	}
 
 	#box-LogBox {
@@ -22,6 +23,174 @@ CSS
 	#log {
     height: 100px;
 	}
+
+	// Pasted from stylesheet bigBlue
+	.box
+	{
+		text-align:center;
+		padding:0px;
+		box-shadow:none;
+	}
+
+	.thing,.box-header,.box-footer,.box-bit
+	{
+		background:#39f;
+		box-shadow:0px 0px 4px rgba(0,0,0,0.2),1px 1px 2px rgba(0,0,0,0.5),0px 0px 4px rgba(255,255,255,0.5) inset;
+	}
+	.box-bit{border-radius:20px;}
+
+	.box-header
+	{
+		border-bottom-left-radius:20px;
+		border-bottom-right-radius:20px;
+		margin-bottom:4px;
+	}
+	.box-footer
+	{
+		border-top-left-radius:20px;
+		border-top-right-radius:20px;
+		margin-top:4px;
+	}
+
+
+	#box-main
+	{
+		left:0px;
+		top:0px;
+		bottom:0px;
+		overflow:hidden;
+		width:60%;
+		position:absolute;
+	}
+	#box-res.fullWidth
+	{
+		width:100%;
+		top:5%;
+		height:5%;
+		min-height:32px;
+		z-index:100;
+		position:absolute;
+	}
+	#box-buttons
+	{
+		top:0px;
+		right:0px;
+		bottom:0px;
+		left:0px;
+		position:absolute;
+	}
+	#box-store
+	{
+		right:0px;
+		top:0px;
+		bottom:0px;
+		width:40%;
+		position:absolute;
+	}
+	#box-buildings,#box-upgrades
+	{
+		top:0px;
+		bottom:0px;
+		width:50%;
+		right:0%;
+		overflow-x:hidden;
+		overflow-y:scroll;
+		padding-bottom:48px;/* this is to accommodate the info and settings buttons */
+		position:absolute;
+	}
+	#box-buildings
+	{right:50%;}
+
+	#box-buildings{background:linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 20%);}
+	#box-upgrades{background:rgba(0,0,0,0.3);}
+
+	#bulkDisplay{margin:-11px 24px 4px 24px;}
+
+
+	.thing
+	{
+		display:inline-block;
+		padding:0px;
+		margin:2px;
+		cursor:pointer;
+	}
+	.thing:hover,.thing.lit
+	{
+		background:#6cf;
+	}
+	.thing.cantAfford
+	{
+		opacity:0.65;
+	}
+	.upgrade.cantAfford
+	{
+		box-shadow:0px 0px 4px #39f;
+		border-radius:8px;
+	}
+	.upgrade.cantAfford:hover
+	{
+		box-shadow:0px 0px 4px #6cf;
+	}
+	.upgrade.owned,.achiev.owned
+	{
+		background:#6cf;
+	}
+	.thing-text,.thing-costs{font-weight:bold;}
+
+	.building
+	{
+		border-top-left-radius:20px;
+		border-bottom-left-radius:20px;
+		display:block;
+		margin-right:0px;
+		font-size:14px;
+	}
+
+	.fullWidth
+	{
+		display:block;
+		margin-left:0px;
+		margin-right:0px;
+		z-index:10;
+	}
+	#game .fullWidth
+	{
+		height:auto;
+		min-height:auto;
+	}
+	.fullWidth,.fullWidth:hover
+	{
+		/*background:rgba(0,0,0,0.5);
+		background:linear-gradient(to bottom,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.5) 100%);*/
+		background:linear-gradient(to right,rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0) 100%);
+		box-shadow:none;
+	}
+	.fullWidth:before,.fullWidth:after
+	{
+		content:'';
+		height:1px;
+		background:linear-gradient(to right,rgba(255,255,255,0) 0%,rgba(255,255,255,0.25) 50%,rgba(255,255,255,0) 100%);
+		position:absolute;
+		left:0px;
+		right:0px;
+		z-index:-1;
+	}
+	.fullWidth:before{top:-1px;}
+	.fullWidth:after{bottom:-1px;}
+
+	.fullWidth .thing-icon
+	{
+		margin-top:-14px;
+		margin-bottom:-14px;
+	}
+	.fullWidth .thing-text
+	{
+		margin-top:-4px;
+		margin-bottom:-4px;
+	}
+
+	#game.filtersOn .thing-icon{filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5));}
+
 
 Layout
 	*ResourceBox
@@ -128,7 +297,7 @@ Layout
 				tag:fight
 
 				*fight1
-					name:First Monster
+					name:Fight First Boss
 					on click:
 						if (no inCombat)
 							yield 100 enemyHealth
@@ -143,7 +312,7 @@ Layout
 					end
 
 				*fight2
-					name:Second Monster
+					name:Fight Mid Boss
 					hidden
 					on click:
 						if (no inCombat)
@@ -159,7 +328,7 @@ Layout
 					end
 
 				*fight3
-					name:Final Monster
+					name:Fight Final Boss
 					hidden
 					on click:
 						if (no inCombat)
@@ -248,11 +417,31 @@ Layout
 
 		// Other
 		*TEMPLATE
+			*achievementButton
+				Name:Show/Hide Achievements
+				desc:Toggles achievement view.
+				on click:
+					if (have showingAchievements)
+						hide :Achievements
+						showingAchievements=0
+						toast Hiding Achievements
+					else
+						show :Achievements
+						showingAchievements=1
+						toast Showing Achievements
+					end
+				end
 
 			*clearLogButton
 				name:Clear Log
 				desc:Clears the text log
 				on click:clear log
+				on start:
+					log Welcome to Sacayan's RPG Clicker.
+					log The goal of this game is to become strong enough to defeat the third and final boss!
+					log Do this by increasing your stats with the starting buttons and later unlocking passive upgrades!
+					log Start fighting a monster by clicking on the "First Monster" button!
+				end
 
 			*debugButton
 				name:Debug Button
@@ -287,6 +476,9 @@ Layout
 			hidden
 
 			*enemyAchievement
+
+			*showingAchievements
+				start with:1
 
 		// Player combat stats
 		*TEMPLATE
@@ -335,7 +527,7 @@ Layout
 
 			*gold
 				name:Gold
-				desc:Use this to buy things
+				desc:Use this to buy things.</>Get this by killing monsters.
 
 			*mentors
 				name:Mentors
@@ -738,7 +930,8 @@ Achievements
 				req:enemyAchievement=30
 				on earn:
 					toast Congratulations! You are now a Master Adventurer!
-					toast Retirement is now available.
+					toast You sense that your adventure is complete. Retirement is now available.
+					log Congratulations! You have defeated the final boss. Retire to start again with increased difficulty and bonuses.
 					show retireButton
 				end
 
