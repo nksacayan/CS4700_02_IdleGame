@@ -10,38 +10,79 @@ Settings
 	no bulk particles
 
 CSS
+	#content {
+  		border: 5px solid red;
+	}
+
 	#box-LogBox {
 		max-height:150px;
 	}
 
 	#log {
-    height: 100px;
-	}	
+    	height:100px;
+	}
+
+	.box-bit{
+		border-radius:0px;
+	}
+
+	#box-things-Buildings {
+		overflow: auto;
+		max-height: 200px;
+	}
+
+	#box-ButtonBox {
+		// width: 50%;
+		/* float: left; */
+	}
+
+	#box-BuildingBox {
+		// width: 50%;
+		/* float: left; */
+	}
+
+	#box-CombatBox {
+		// width: 50%;
+		/* float: right; */
+	}
+
+	.box-header {
+		border-bottom-left-radius: 0px;
+		border-bottom-right-radius: 0px;
+		margin-bottom: 0px;
+	}
+
+	.building {
+		border-radius: 20px;
+		display: block;
+		margin-right: 0px;
+		font-size: 14px;
+	}
 
 Layout
 	*ResourceBox
 		contains:Resources
-		header:Resources
+		header:Character Stats
 
 	*ButtonBox
 		contains:Buttons
-		header:Buttons
+		header:Out of Combat Actions
 
 	*BuildingBox
 		contains:Buildings
 		header:Purchasables
 
-	*AchievementBox
-		contains:Achievements
-		header:Achievements
-
 	*CombatBox
-		header:Combat Box
+		header:The Wilderness
 		contains:tag:combatStats, tag:fight, tag:combatActions, tag:spells, tag:items, tag:enemyStats
 		ps:hide
 
 	*LogBox
 		contains:Log
+
+	*AchievementBox
+		contains:Achievements
+		header:Achievements
 
 	Buttons
 		// Training options
@@ -51,7 +92,10 @@ Layout
 			  *trainButton
 			    	name:Train
 					desc:Increases Strength
-			    	on click:if (no inCombat) yield 1 str
+			    	on click:
+						if (no inCombat) yield 1 str
+						log You feel stronger!
+					end
 
 				*drinkButton
 					name:Drink
@@ -59,13 +103,17 @@ Layout
 					on click:
 						if (no inCombat)
 							yield 1 con
+							log You feel tougher!
 						end
 					end
-
+					
 				*studyButton
 			    	name:Study
 					desc:Increases Intelligence
-			    	on click:if (no inCombat) yield 1 int
+			    	on click:
+						if (no inCombat) yield 1 int
+						log You feel smarter!
+					end
 
 				*meditateButton
 					name:Meditate
@@ -73,7 +121,7 @@ Layout
 					on click:
 						if (no inCombat)
 							yield 1 focus
-							yield 2 maxMana
+							log You feel more focused!
 						end
 					end
 
@@ -242,6 +290,7 @@ Layout
 
 		// Other
 		*TEMPLATE
+
 			*achievementButton
 				Name:Show/Hide Achievements
 				desc:Toggles achievement view.
