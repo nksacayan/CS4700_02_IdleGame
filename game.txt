@@ -19,6 +19,10 @@ CSS
 		grid-gap:1px;
 	}
 
+	.button {
+	background: red;
+	}
+
 	.thing.res {
 		background: transparent;
    		box-shadow: none;
@@ -142,7 +146,7 @@ Layout
 							log You feel tougher!
 						end
 					end
-					
+
 				*studyButton
 			    	name:Study
 					desc:Increases Intelligence
@@ -296,12 +300,14 @@ Layout
 					name:Fireball
 					desc:Lobs a fireball at your enemies for 2*intelligence ([2*int]) damage!
 					on click:
-						if (have inCombat)
+						if (have inCombat and mana>=2*int)
 							lose (2*int) enemyHealth
 							lose (int/4) mana
 							log You cast Fireball for [2*int] damage!
 							[include enemyTurn]
 							[include checkBattleStatus]
+						else
+							log Not enough mana!
 						end
 					end
 
@@ -309,13 +315,15 @@ Layout
 					name:Heal
 					desc:Heals self by *placeholder*
 					on click:
-						if (have inCombat)
+						if (have inCombat and mana>=2*int)
 							if (2*int<=maxHealth) yield (2*int) health
 							else health=maxHealth
 							lose (int/4) mana
 							log You cast Heal and regain [2*int] health!
 							[include enemyTurn]
 							[include checkBattleStatus]
+						else
+							log Not enough mana!
 						end
 					end
 
@@ -352,8 +360,8 @@ Layout
 				on start:
 					log Welcome to Sacayan's RPG Clicker.
 					log The goal of this game is to become strong enough to defeat the third and final boss!
-					log Do this by increasing your stats with the starting buttons and later unlocking passive upgrades!
-					log Start fighting a monster by clicking on the "First Monster" button!
+					log Do this by increasing your stats with the Out of Combat Actions and later unlocking passive upgrades!
+					log Start fighting a monster by clicking on the "Fight First Boss" button!
 				end
 
 			*debugButton
@@ -750,7 +758,7 @@ Buildings
 				req:fight2Win
 				cost:100 gold
 				passive:increase yield of mana by 10
-		
+
 
 Achievements
 	*TEMPLATE
@@ -922,10 +930,10 @@ Includes
 		[include endCombat]
 
 	*include checkBattleStatus
-		if (enemyHealth<=0) 
+		if (enemyHealth<=0)
 			[include winBattle]
 			[include endCombat]
-		else if (health<=0) 
+		else if (health<=0)
 			[include loseBattle]
 			[include endCombat]
 		end
